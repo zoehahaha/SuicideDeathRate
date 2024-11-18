@@ -8,7 +8,7 @@ execute:
 book:
   title: "YOUR PROJECT TITLE"
   author:
-    - AUTHOR1 (UNI1)
+    - Jingyi Zou (jz3867)
     - AUTHOR2 (UNI2)
   repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
   date: today
