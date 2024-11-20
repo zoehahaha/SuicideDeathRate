@@ -9,9 +9,8 @@ In this project, we will use the "Death Rates for Suicide" dataset from the CDC 
 
 ```{r}
 # Load necessary libraries
-library(tidyverse)
+library(tidyverse, quietly = TRUE)
 library(ggplot2)
-library(VIM)  # For visualizing missing values if available
 
 # Read the dataset
 data <- read.csv("DQS_Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States_from_CDC_WONDER_20241119.csv")
