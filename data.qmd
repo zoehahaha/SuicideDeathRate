@@ -37,7 +37,7 @@ ggplot(missing_data, aes(x = Variable, y = Missing_Count)) +
   theme_minimal()
 ```
 
-The bar chart above shows the missing value counts by variable in the dataset. We can see that there are 3 columns are all NAs towards the whoe dataset: "SUBTOPIC_ID", "SUBTOPIC" and "FLAG". One possible explanation is that this dataset doesn't have any subtopic. For columns of "STANDARD_ERROR", "ESTIMATE_UCI", "ESTIMATE_LCI" and "ESTIMATE", they have 182 missing values respectively. Judging by the name of columns, it's easy to see their correlation so they have the same counts in missing values. Notice that, "ESTIMATE" column represents the number of death per 100,000 resident population, which is the most importance information in this dataset. Thus, we need dig deep in this variable. 
+The bar chart above shows the missing value counts by variable in the dataset. We can see that there are 3 columns are all NAs towards the whoe dataset: "SUBTOPIC_ID", "SUBTOPIC" and "FLAG". One possible explanation is that this dataset doesn't have any subtopic. For columns of "STANDARD_ERROR", "ESTIMATE_UCI", "ESTIMATE_LCI" and "ESTIMATE", they have 182 missing values respectively. Judging by the name of columns, it's easy to see their correlation so they have the same counts in missing values. Notice that, "ESTIMATE" column represents the number of death per 100,000 resident population, which is the most important information in this dataset. Thus, we need dig deep in this variable. 
 
 ```{r}
 missing_counts <- data %>%
