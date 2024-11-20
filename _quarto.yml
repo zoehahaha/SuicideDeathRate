@@ -6,7 +6,7 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Explainatory Analysis of Suicide Death Rate and Sex, Age & Race"
   author:
     - Jingyi Zou (jz3867)
     - Yaojia Lu (yl5755)
