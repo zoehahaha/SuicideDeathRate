@@ -7,11 +7,13 @@ In this project, we will use the "Death Rates for Suicide" dataset from the CDC 
 
 ## Missing value analysis
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # Load necessary libraries
 library(tidyverse, quietly = TRUE)
 library(ggplot2)
+```
 
+```{r}
 # Read the dataset
 data <- read.csv("DQS_Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States_from_CDC_WONDER_20241119.csv")
 
