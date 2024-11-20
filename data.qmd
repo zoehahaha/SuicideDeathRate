@@ -54,7 +54,7 @@ ggplot(missing_counts, aes(x = GROUP, y = TIME_PERIOD, fill = missing_count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 ```
 
-The heatmap reveals the distribution of missing values in the "ESTIMATE" column, across various Group categories and Time Periods. The blank spaces in the heatmap represent combinations of subgroup and TIME_PERIOD where no data exists in the dataset. This means that for certain subgroups during specific time periods, no rows are present in the data.
+The heatmap reveals the distribution of missing values in the "ESTIMATE" column, across various Group categories and Time Periods. The blank spaces in the heatmap represent combinations of "GROUP" and "TIME_PERIOD" where no data exists in the dataset. This means that for certain subgroups during specific time periods, no rows are present in the data.
 
 For the majority of groups, such as Age group, Sex, and simpler combinations like Sex and race, the data appears consistently available from 2000 to 2015. This is reflected in the lighter blue areas of the heatmap, signifying minimal missing values in these categories. These groups represent higher levels of aggregation, where data collection and reporting are typically more consistent and reliable.
 
