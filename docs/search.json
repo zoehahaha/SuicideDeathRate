@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "YOUR PROJECT TITLE",
     "section": "",
-    "text": "1 Introduction"
+    "text": "1 Introduction\nIn this project, we aim to explore the death rates for suicide in the United States, segmented by sex, race, Hispanic origin, and age. Suicide, defined as the act of intentionally causing one’s own death, is a significant public health issue with profound personal and societal consequences. According to the CDC website, suicide is a leading cause of death, affecting individuals across all age groups and demographics. It has a far-reaching impact on both the individuals directly involved and on their families, communities, and society at large. Importantly, certain groups experience higher suicide rates than others, which underscores the importance of understanding these patterns to develop targeted interventions. Through this project, we hope to explore the patterns in suicide rates across different demographic groups and over time, which may support the creation of tailored prevention strategies. Specifically, we will investigate how suicide rates differ by gender, examining whether males or females are more vulnerable within specific contexts. We will also explore racial and ethnic disparities, identifying whether certain groups face unique risks. Additionally, we will analyze how suicide trends have evolved between 1999 and 2020, asking whether these patterns have changed over time for different demographic groups."
   },
   {
     "objectID": "data.html#description",
     "href": "data.html#description",
     "title": "2  Data",
     "section": "2.1 Description",
-    "text": "2.1 Description"
+    "text": "2.1 Description\nIn this project, we will use the “Death Rates for Suicide” dataset from the CDC (Centers for Disease Control and Prevention) website. The dataset is published by the National Center for Health Statistics and is updated annually. It is provided as a CSV file containing 21 columns and 3,786 rows. However, there are some challenges with the dataset. Likely due to privacy concerns, the dataset does not explicitly explain how the data was collected, and there is a lack of transparency regarding the calculation process for the estimates. Additionally, the dataset requires careful preprocessing for analysis, as there are hierarchical relationships between levels in some columns. For example, in the “Subgroup” column, levels such as “Female: 25-34 years” are subgroup of “Female,” depending on their corresponding “Group” column level (“Sex and age group” intersects with “Sex”). This hierarchical structure necessitates detailed hard works on preprocessing. For importing the dataset, we will store it in a GitHub repository to ensure centralized and version-controlled access. Using the raw file link from GitHub, we will import the data directly into RStudio using the read.csv() function for analysis. Here is the link to our dataset’s website: https://data.cdc.gov/NCHS/DQS-Death-rates-for-suicide-by-sex-race-Hispanic-o/p7se-k3ix/about_data"
   },
   {
     "objectID": "data.html#missing-value-analysis",

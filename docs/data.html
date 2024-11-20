@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">YOUR PROJECT TITLE</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/zoehahaha/DSjobonGlassdoor.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/zoehahaha/SuicideDeathRate.git" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -144,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zoehahaha/DSjobonGlassdoor.git/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zoehahaha/DSjobonGlassdoor.git/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zoehahaha/SuicideDeathRate.git/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zoehahaha/SuicideDeathRate.git/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -168,6 +168,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
+<p>In this project, we will use the “Death Rates for Suicide” dataset from the CDC (Centers for Disease Control and Prevention) website. The dataset is published by the National Center for Health Statistics and is updated annually. It is provided as a CSV file containing 21 columns and 3,786 rows. However, there are some challenges with the dataset. Likely due to privacy concerns, the dataset does not explicitly explain how the data was collected, and there is a lack of transparency regarding the calculation process for the estimates. Additionally, the dataset requires careful preprocessing for analysis, as there are hierarchical relationships between levels in some columns. For example, in the “Subgroup” column, levels such as “Female: 25-34 years” are subgroup of “Female,” depending on their corresponding “Group” column level (“Sex and age group” intersects with “Sex”). This hierarchical structure necessitates detailed hard works on preprocessing. For importing the dataset, we will store it in a GitHub repository to ensure centralized and version-controlled access. Using the raw file link from GitHub, we will import the data directly into RStudio using the <code>read.csv()</code> function for analysis. Here is the link to our dataset’s website: https://data.cdc.gov/NCHS/DQS-Death-rates-for-suicide-by-sex-race-Hispanic-o/p7se-k3ix/about_data</p>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>

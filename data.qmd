@@ -2,4 +2,7 @@
 
 ## Description
 
+In this project, we will use the "Death Rates for Suicide" dataset from the CDC (Centers for Disease Control and Prevention) website. The dataset is published by the National Center for Health Statistics and is updated annually. It is provided as a CSV file containing 21 columns and 3,786 rows. However, there are some challenges with the dataset. Likely due to privacy concerns, the dataset does not explicitly explain how the data was collected, and there is a lack of transparency regarding the calculation process for the estimates. Additionally, the dataset requires careful preprocessing for analysis, as there are hierarchical relationships between levels in some columns. For example, in the "Subgroup" column, levels such as "Female: 25-34 years" are subgroup of "Female," depending on their corresponding "Group" column level ("Sex and age group" intersects with "Sex"). This hierarchical structure necessitates detailed hard works on preprocessing. For importing the dataset, we will store it in a GitHub repository to ensure centralized and version-controlled access. Using the raw file link from GitHub, we will import the data directly into RStudio using the `read.csv()` function for analysis. Here is the link to our dataset's website: https://data.cdc.gov/NCHS/DQS-Death-rates-for-suicide-by-sex-race-Hispanic-o/p7se-k3ix/about_data
+
+
 ## Missing value analysis
