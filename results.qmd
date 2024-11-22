@@ -1,1 +1,124 @@
 # Results
+
+```{r, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(tidyverse, quietly = TRUE)
+library(ggplot2)
+
+data <- read.csv("DQS_Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States_from_CDC_WONDER_20241119.csv")
+```
+
+## Trends Over Time
+```{r}
+# Define a function to plot suicide rates by subgroup without faceting
+plot_suicide_rates_combined <- function(data, group_id) {
+  # Filter for only one method of ESTIMATE calculation
+  filtered_data <- data %>%
+    filter(ESTIMATE_TYPE_ID == 2)
+  
+  # Filter data based on the input group_id
+  filtered_data <- filtered_data %>%
+    filter(GROUP_ID == group_id)
+  
+  # Extract the group name for the given group_id
+  group_name <- unique(filtered_data$GROUP)
+  
+  # Create the combined plot
+  ggplot(filtered_data, aes(x = TIME_PERIOD, y = ESTIMATE, color = SUBGROUP, group = SUBGROUP)) +
+    geom_line(size = 1) +
+    geom_point(size = 1) +
+    labs(
+      title = paste("Suicide Rates by", group_name, "Over Time"),
+      x = "Year",
+      y = "Suicide Rate (per 100,000)",
+      color = "Subgroup"
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_text(size = 10),
+      legend.text = element_text(size = 8),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+}
+```
+### Total
+
+```{r}
+plot_suicide_rates_combined(data, group_id = 1)
+```
+## Suicide Rates by Age Group Over Time
+```{r}
+plot_suicide_rates_combined(data, group_id = 2)
+```
+
+## Suicide Rates by Sex Group Over Time
+
+```{r}
+plot_suicide_rates_combined(data, group_id = 3)
+```
+
+```{r}
+# Create a dataset with combined race groups by averaging male and female estimates
+combine_race_data <- function(data) {
+  # Filter for "sex and race" group
+  race_data <- data %>%
+    filter(GROUP == "Sex and race") %>%
+    mutate(Race = case_when(
+      SUBGROUP_ORDER %in% c(46, 50) ~ "American Indian and Alaska Native",
+      SUBGROUP_ORDER %in% c(47, 51) ~ "Asian or Pacific Islander",
+      SUBGROUP_ORDER %in% c(48, 52) ~ "Black",
+      SUBGROUP_ORDER %in% c(49, 53) ~ "White",
+      TRUE ~ NA_character_  # Exclude other categories
+    )) %>%
+    filter(!is.na(Race))  # Remove rows that are not part of the selected races
+  
+  # Group by Time Period and Race, then calculate the average estimate
+  combined_race_data <- race_data %>%
+    group_by(TIME_PERIOD, Race) %>%
+    summarize(Avg_Estimate = mean(ESTIMATE, na.rm = TRUE), .groups = "drop")
+  
+  return(combined_race_data)
+}
+
+# Apply the function to your dataset
+race_trend_data <- combine_race_data(data)
+
+# View the combined data
+head(race_trend_data)
+
+# Plot the trend over time by race
+ggplot(race_trend_data, aes(x = TIME_PERIOD, y = Avg_Estimate, color = Race, group = Race)) +
+  geom_line(size = 1) +
+  geom_point(size = 1) +
+  labs(
+    title = "Suicide Rates by Race Over Time",
+    x = "Year",
+    y = "Average Suicide Rate (per 100,000)",
+    color = "Race"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
