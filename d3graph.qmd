@@ -1,13 +1,59 @@
 # Interactive graph
+
 <style>
   * {
     font-family: sans-serif;
   }
+
+  .tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    padding: 8px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .control-container {
+    margin-bottom: 20px;
+  }
+
+  .control-container label,
+  .control-container select {
+    margin-right: 10px;
+  }
+
+  .description {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
 </style>
+
+<div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+  <p style="line-height: 1.8;">
+    This interactive graph allows users to explore trends in suicide rates over time by dynamically filtering data and highlighting specific subgroups.
+  </p>
+  <p style="line-height: 1.8;">
+    - **Filter by Category**: Use the first dropdown menu to select a category (e.g., Age, Race, Sex).  
+  </p>
+  <p style="line-height: 1.8;">
+    - **Highlight Subgroup**: Once a category is selected, the second dropdown updates with relevant subgroups. Select a subgroup to highlight its trend line for easier analysis.  
+  </p>
+  <p style="line-height: 1.8;">
+    - **Mouse Tooltip**: When a subgroup is highlighted, hover over any point on the graph to reveal its exact value. This includes the year, subgroup, and suicide rate (per 100,000), allowing for precise examination of data trends.  
+  </p>
+</div>
 
 <div>
   <label for="category-filter">Filter by Category:</label>
   <select id="category-filter"></select>
+          
   <label for="subgroup-filter">Highlight Subgroup:</label>
   <select id="subgroup-filter"></select>
 </div>

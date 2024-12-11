@@ -16,7 +16,7 @@ d3.csv("Clean.csv").then((data) => {
   const categories = [...new Set(data.map((d) => d.Category))];
 
   // Set up SVG dimensions and margins
-  const margin = { top: 20, right: 150, bottom: 70, left: 70 };
+  const margin = { top: 60, right: 150, bottom: 70, left: 70 };
   const width = 800 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
 
@@ -27,6 +27,16 @@ d3.csv("Clean.csv").then((data) => {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  // Add a title
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", -30) // Adjusted for space above the chart
+    .attr("text-anchor", "middle")
+    .style("font-size", "20px")
+    .style("font-weight", "bold")
+    .text("Interactive Suicide Rate Trends by Subgroup");
 
   // Tooltip div
   const tooltip = d3
@@ -101,7 +111,7 @@ d3.csv("Clean.csv").then((data) => {
   };
 
   // Function to update the chart
-  const updateChart = (selectedCategory, highlightedSubgroup) => {
+  const updateChart = (selectedCategory, highlightedSubgroup, animate = false) => {
     const filteredData = data.filter((d) => d.Category === selectedCategory);
     const subgroups = [...new Set(filteredData.map((d) => d.SUBGROUP))];
 
@@ -128,6 +138,14 @@ d3.csv("Clean.csv").then((data) => {
       .attr("fill", "none")
       .attr("stroke", (d) => colorScale(d[0]))
       .attr("stroke-width", (d) => (d[0] === highlightedSubgroup ? 3 : 1.5))
+      .attr("d", (d) =>
+        d3
+          .line()
+          .x((d) => xScale(d.TIME_PERIOD))
+          .y(() => (animate ? yScale(0) : yScale(d.ESTIMATE)))(d[1])
+      )
+      .transition()
+      .duration(animate ? 1000 : 0)
       .attr("d", (d) =>
         d3
           .line()
@@ -194,19 +212,18 @@ d3.csv("Clean.csv").then((data) => {
 
   // Initialize chart with default values
   updateSubgroupDropdown(categories[0]);
-  updateChart(categories[0], "None");
+  updateChart(categories[0], "None", true);
 
   // Add event listeners for dropdowns
   categoryFilter.on("change", (event) => {
     const selectedCategory = event.target.value;
     updateSubgroupDropdown(selectedCategory);
-    const highlightedSubgroup = subgroupFilter.node().value;
-    updateChart(selectedCategory, highlightedSubgroup);
+    updateChart(selectedCategory, "None", true); // Animate when category changes
   });
 
   subgroupFilter.on("change", (event) => {
     const highlightedSubgroup = event.target.value;
     const selectedCategory = categoryFilter.node().value;
-    updateChart(selectedCategory, highlightedSubgroup);
+    updateChart(selectedCategory, highlightedSubgroup, false); // No animation for subgroup changes
   });
 }).catch((error) => console.error("Error loading data:", error));

@@ -54,7 +54,7 @@
     "href": "d3graph.html",
     "title": "4  Interactive graph",
     "section": "",
-    "text": "Filter by Category:  Highlight Subgroup:",
+    "text": "This interactive graph allows users to explore trends in suicide rates over time by dynamically filtering data and highlighting specific subgroups.\n\n\n\nFilter by Category: Use the first dropdown menu to select a category (e.g., Age, Race, Sex).\n\n\n\nHighlight Subgroup: Once a category is selected, the second dropdown updates with relevant subgroups. Select a subgroup to highlight its trend line for easier analysis.\n\n\n\n\n\nMouse Tooltip: When a subgroup is highlighted, hover over any point on the graph to reveal its exact value. This includes the year, subgroup, and suicide rate (per 100,000), allowing for precise examination of data trends.\n\n\n\n\n\n\nFilter by Category: \nHighlight Subgroup:",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive graph</span>"
     ]

@@ -173,9 +173,61 @@ ul.task-list li input[type="checkbox"] {
   * {
     font-family: sans-serif;
   }
+
+  .tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    padding: 8px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .control-container {
+    margin-bottom: 20px;
+  }
+
+  .control-container label,
+  .control-container select {
+    margin-right: 10px;
+  }
+
+  .description {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
 </style>
+<div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+<p style="line-height: 1.8;">
+This interactive graph allows users to explore trends in suicide rates over time by dynamically filtering data and highlighting specific subgroups.
+</p>
+<p style="line-height: 1.8;">
+</p><ul>
+<li><strong>Filter by Category</strong>: Use the first dropdown menu to select a category (e.g., Age, Race, Sex).
+<p></p>
+<p style="line-height: 1.8;">
+</p><ul>
+<li><strong>Highlight Subgroup</strong>: Once a category is selected, the second dropdown updates with relevant subgroups. Select a subgroup to highlight its trend line for easier analysis.<br>
+</li>
+</ul>
+<p></p>
+<p style="line-height: 1.8;">
+</p><ul>
+<li><strong>Mouse Tooltip</strong>: When a subgroup is highlighted, hover over any point on the graph to reveal its exact value. This includes the year, subgroup, and suicide rate (per 100,000), allowing for precise examination of data trends.<br>
+</li>
+</ul>
+<p></p>
+</li></ul></div>
+
 <div>
-<p><label for="category-filter">Filter by Category:</label> <select id="category-filter"></select> <label for="subgroup-filter">Highlight Subgroup:</label> <select id="subgroup-filter"></select></p>
+<p><label for="category-filter">Filter by Category:</label> <select id="category-filter"></select></p>
+<p><label for="subgroup-filter">Highlight Subgroup:</label> <select id="subgroup-filter"></select></p>
 </div>
 <div id="plot">
 
