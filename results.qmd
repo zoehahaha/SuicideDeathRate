@@ -48,6 +48,7 @@ plot_suicide_rates_combined <- function(data, group_id) {
 plot_suicide_rates_combined(data, group_id = 1)
 ```
 ### Suicide Rates by Age Group Over Time
+
 ```{r}
 plot_suicide_rates_combined(data, group_id = 2)
 ```
