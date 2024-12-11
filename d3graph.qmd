@@ -5,20 +5,14 @@
   }
 </style>
 
-<div id="controls">
-  <label for="filter">Filter by:</label>
-  <select id="filter">
-    <option value="race">Race</option>
-    <option value="sex">Sex</option>
-    <option value="hispanic">Hispanic Origin</option>
-    <option value="ageGroup">Age Group</option>
-  </select>
-  <button id="highlight">Highlight Subgroup</button>
+<div>
+  <label for="category-filter">Filter by Category:</label>
+  <select id="category-filter"></select>
+  <label for="subgroup-filter">Highlight Subgroup:</label>
+  <select id="subgroup-filter"></select>
 </div>
 
 <div id="plot"></div>
-
-<div class="tooltip" id="tooltip"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
