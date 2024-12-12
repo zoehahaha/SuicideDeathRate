@@ -35,6 +35,35 @@
   }
 </style>
 
+<!-- Description Section -->
+<div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+  <p style="line-height: 1.8;">
+    This interactive tree map displays hierarchical structures derived from the dataset. You can explore categories, subgroups, and time periods in a drill-down manner to have a better understadning of the data.
+  </p>
+  <p style="line-height: 1.8;">
+    - **Expand/Collapse Nodes**: Click on any node to expand its children or collapse them.  
+  </p>
+  <p style="line-height: 1.8;">
+    - **Collapse All**: Use the button at the bottom of the tree to collapse all expanded nodes, returning to the root view.  
+  </p>
+  <p style="line-height: 1.8;">
+    - **Hierarchy Visualization**: This tree provides a visual representation of categories broken down into groups, subgroups, and time periods, helping you understand the data structure at a glance.
+  </p>
+</div>
+
+<!-- Collapse Button -->
+<div style="margin-top: 20px;">
+  <button id="collapse-button" style="padding: 8px 15px; border-radius: 5px; background-color: #007acc; color: #fff; border: none;">
+    Collapse All
+  </button>
+</div>
+
+<!-- Tree Container -->
+<div id="tree"></div>
+
+
+<!-- Times Series -->
+
 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
   <p style="line-height: 1.8;">
     This interactive graph allows users to explore trends in suicide rates over time by dynamically filtering data and highlighting specific subgroups.
@@ -62,4 +91,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
+
+d3.json("hierarchy_data.json")
 d3.csv("Clean.csv")
