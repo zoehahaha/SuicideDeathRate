@@ -6,7 +6,7 @@ execute:
   echo: true
 
 book:
-  title: "Explanatory Analysis on Suicide Death Rate"
+  title: "Exploratory Analysis on Suicide Death Rate"
   author:
     - Jingyi Zou (jz3867)
     - Yaojia Lu (yl5755)
