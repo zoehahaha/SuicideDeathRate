@@ -1,1 +1,854 @@
 # Results
+
+In this project. Our focus will be on three part: the interlace hierarchy of our dataset, time series trend, correlation detection. We will analyze the horizontal trends from 1999 to 2021 and delve deeper into the vertical dimension by focusing on the most recent year in the dataset, 2021. In examining the time series trends, we will explore how different categories have evolved over time. For the single year of 2021, we will investigate the correlation between various categories and the suicide rate.
+
+```{r, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(data.tree)
+library(tidyverse, quietly = TRUE)
+library(ggplot2)
+library(dplyr)
+library(DiagrammeR)
+library(collapsibleTree)
+library(ggraph)
+library(igraph)
+library(ggmosaic)
+library(GGally)
+library(patchwork)
+library(gridExtra)
+library(ggalluvial)
+library(knitr)
+library(kableExtra)
+library(grid)
+```
+
+```{r, message=FALSE, warning=FALSE}
+data <- read.csv("DQS_Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States_from_CDC_WONDER_20241119.csv")
+```
+
+
+## Data Overview & Cleanning 
+
+### Handle missing columns and values
+
+```{r}
+# remove 'SUBTOPIC', 'SUBTOPIC_ID', 'FLAG','FOOTNOTE_ID_LIST'
+data <- subset(data, select = -c(SUBTOPIC, SUBTOPIC_ID, FLAG,TOPIC))
+
+# replace NA with -1 in 'ESTIMATE','STANDARD_ERROR', 'ESTIMATE_UCI', and 'ESTIMATE_LCI'
+columns_to_replace <- c("ESTIMATE", "STANDARD_ERROR", "ESTIMATE_UCI", "ESTIMATE_LCI")
+data[columns_to_replace] <- lapply(data[columns_to_replace], function(column) {
+  column[is.na(column)] <- -1
+  return(column)
+})
+```
+
+As part of the data preprocessing stage, we identified missing values that need to be addressed before proceeding with analysis. For the completely blank columns, namely 'SUBTOPIC', 'SUBTOPIC_ID', and 'FLAG', we will remove them entirely as they do not provide any useful information. Also for the Column 'TOPIC', values for each row are same (value = "Death rates for suicide") which is not useful. Therefore we will remove 'TOPIC' column as well. 
+
+For rows with missing values in the 'ESTIMATE' column, we will replace the missing values with -1 instead of removing the rows. This approach is taken because each row in our dataset contains unique and critical information about a specific subgroup in a given year. Removing such rows could result in the complete loss of information for certain subgroups. Since 'ESTIMATE' values must be greater than zero, using -1 will clearly indicate missing data without overlapping with valid entries. We will apply the same method to handle missing values in the 'STANDARD_ERROR', 'ESTIMATE_UCI', and 'ESTIMATE_LCI' columns.
+
+After checking, there are no missing value in the dataset now.
+
+
+## Hierarchy Data
+
+### Levels of essential columns
+
+```{r}
+# Calculate the maximum number of levels across all categories
+max_levels <- max(
+  length(unique(data$ESTIMATE_TYPE)),
+  length(unique(data$CLASSIFICATION)),
+  length(unique(data$GROUP)),
+  length(unique(data$TIME_PERIOD)),
+  length(unique(data$SUBGROUP))
+)
+
+# Pad shorter columns with empty spaces to align their lengths
+table_data <- data.frame(
+  Number = seq_len(max_levels),
+  ESTIMATE_TYPE = c(unique(data$ESTIMATE_TYPE), rep("", max_levels - length(unique(data$ESTIMATE_TYPE)))),
+  CLASSIFICATION = c(unique(data$CLASSIFICATION), rep("", max_levels - length(unique(data$CLASSIFICATION)))),
+  GROUP = c(unique(data$GROUP), rep("", max_levels - length(unique(data$GROUP)))),
+  TIME_PERIOD = c(unique(data$TIME_PERIOD), rep("", max_levels - length(unique(data$TIME_PERIOD)))),
+  SUBGROUP = c(unique(data$SUBGROUP), rep("", max_levels - length(unique(data$SUBGROUP))))
+)
+
+# Create the table with a title and scrollable container
+kable(
+  table_data,
+  col.names = c("No.", "ESTIMATE_TYPE", "CLASSIFICATION", "GROUP", "TIME_PERIOD","SUBGROUP"),
+  format = "html",
+  escape = FALSE
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed"),
+    font_size = 14
+  ) %>%
+  add_header_above(c(" " = 1, "Levels in Data Columns" = 5), bold = TRUE, font_size = 16) %>%
+  kable_styling(position = "center") %>%
+  row_spec(0, bold = TRUE, align = "center") %>%
+  row_spec(1:max_levels, align = "center") %>%
+  scroll_box(
+    width = "100%", 
+    height = "400px",
+    fixed_thead = TRUE # Freeze the header row
+  )
+```
+
+
+After the data cleaning process, the dataset consists of 3,786 rows and 17 columns. Among these 17 columns, 5 are categorical variables, and 12 are numerical variables. Within the numerical columns, 6 serve as corresponding series numbers linked to specific categorical columns, essentially acting as identifiers or keys. Therefore, the columns we focus on, which provide the most valuable insights, include the categorical variables: ESTIMATE_TYPE, CLASSIFICATION, GROUP, SUBGROUP, and TIME_PERIOD, as well as the key numerical variable ESTIMATE.
+
+The table above illustrates the levels within the categorical variables, highlighting their variety and structure. Upon closer examination, we observed a hierarchical relationship among some columns. Specifically, the GROUP column serves as a subdivision of CLASSIFICATION, while SUBGROUP represents a further division of GROUP. This hierarchy reflects the nested nature of these variables and provides a structured way to organize and interpret the data. For example, a single CLASSIFICATION may encompass multiple GROUPS, and each GROUP can be broken down into several SUBGROUPS.
+
+In addition to the hierarchical relationships, there are also overlaps, inclusions, and disjoint relationships within certain columns, particularly in the GROUP and SUBGROUP variables. These relationships make the dataset more complex, as some groups or subgroups may belong to multiple categories, while others are entirely distinct. The overlapping for SUBGROUP column is introduced by the GROUP columns due the horizontally hierarchy, so we can use GROUP column as key when we want to choose any specific SUBGROUP for analysis. In general, overlapping and inclusion can introduce ambiguity if not carefully understood and managed.
+
+Understanding the hierarchy and relationships within the dataset is crucial for extracting the most relevant and accurate information. It helps maintains clarity on how CLASSIFICATION, GROUP, and SUBGROUP interact allows us to accurately group and segment the data to explore different questions, identify trends, and derive insights. This structured approach to understanding the dataset lays a strong foundation for conducting reliable analysis and presenting clear, effective visualizations.
+
+### Static Hierarchy Visualization (Tree Diagram)
+
+```{r,fig.height=8,fig.width=15}
+# Prepare the data for hierarchy
+hierarchy_data <- data %>%
+  select(CLASSIFICATION, GROUP, SUBGROUP) %>%
+  distinct()
+
+# Calculate counts for subgroups under each group
+group_subgroup_counts <- hierarchy_data %>%
+  group_by(CLASSIFICATION, GROUP) %>%
+  summarise(Number_of_Subgroups = n_distinct(SUBGROUP), .groups = "drop")
+
+# Build hierarchical edges
+edges <- group_subgroup_counts %>%
+  mutate(
+    from_root = "Data",
+    from_class = CLASSIFICATION,
+    from_group = paste0(GROUP,"."), 
+    to_group = paste0("# of Subgroups: ", Number_of_Subgroups)
+  ) %>%
+  select(
+    from = from_root, to = from_class
+  ) %>%
+  bind_rows(
+    group_subgroup_counts %>%
+      mutate(from = CLASSIFICATION, to = paste0(GROUP,".")) %>%  # Only keep GROUP name
+      select(from, to)
+  ) %>%
+  bind_rows(
+    group_subgroup_counts %>%
+      mutate(from = paste0(GROUP,"."), 
+             to = paste0("# of Subgroups: ", Number_of_Subgroups)) %>%
+      select(from, to)
+  )
+
+# Create igraph object
+graph <- graph_from_data_frame(edges, directed = TRUE)
+
+# Set plot size
+options(repr.plot.width = 14, repr.plot.height = 10)  # Adjust figure dimensions
+
+# Improved Visualization
+ggraph(graph, layout = "tree") +  # Use tree layout
+  geom_edge_link() +
+  geom_node_point(size = 3, color = "skyblue") +  # Add nodes
+  geom_node_text(aes(label = name), hjust = 0.4, vjust = -1.2, angle = 35, size = 4.5) +  # Add labels
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 20),  
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    plot.caption = element_text(hjust = 0.5, size = 12)
+  ) +
+  labs(
+    title = "Hierarchy Visualization of Dataset",
+    subtitle = "Dataset → Classifications → Groups → Number of Subgroups",
+    x = NULL, y = NULL,
+    caption = "Figure 1: The hierarchy from the dataset classifications to groups and their corresponding number of subgroups."
+  )
+
+```
+
+We can use tree diagram to effectively visualizes the hierarchical structure between columns of the dataset, illustrating the relationships between different levels: from the dataset as a whole to classifications, groups, and subgroups. By breaking down the dataset into its hierarchical components, the diagram provides clarity on how data is organized and structured, highlighting the nested relationships between categories. One notable adjustment in the visualization is the representation of the GROUP to SUBGROUP layer. Instead of listing all 201 branches from the group layer to the subgroup layer—which would overwhelm the visualization—we aggregate this complexity by summarizing the number of subgroups for each group. This approach enhances readability and ensures that the graph remains clean and interpretable. In the figure 1 in the Interactive graph part, there is a more detailed and comprehensive tree diagram. Due to the benefits animation, the branch is more readable.
+
+
+## Trends Over Time
+
+In this section, we will analyze the trends in suicide rates over time under various divisions (total, age groups, genders, racial categories). This approach will help us identify temporal patterns and any significant disparities or shifts within these divisions, offering insights into how suicide rates have evolved and how they differ across subpopulations. By leveraging both crude and age-adjusted rates appropriately, we aim to present a comprehensive and balanced view of these trends.
+
+Crude suicide rate refers to the total number of suicides per 100,000 individuals in a population without accounting for differences in age distribution. It provides a direct measure of the overall suicide rate within a population. On the other hand, the age-adjusted suicide rate adjusts for variations in the age structure of different populations, allowing for fairer comparisons across populations with different age distributions or over time as a population's age composition changes. For this analysis, we will use the crude suicide rate when visualizing suicide rates across specific age ranges, as it directly reflects the raw rates within those categories. However, for broader comparisons and understanding trends over time across different groups or divisions, the age-adjusted rate is more appropriate as it minimizes the confounding effect of age structure, providing a clearer picture of trends unaffected by demographic differences.
+
+```{r}
+# Define a function to plot suicide rates by subgroup without faceting
+plot_suicide_rates_combined <- function(data, group_id, type_id) {
+  # Filter for only one method of ESTIMATE calculation
+  filtered_data <- data %>%
+    filter(ESTIMATE_TYPE_ID == type_id)
+  
+  # Filter data based on the input group_id
+  filtered_data <- filtered_data %>%
+    filter(GROUP_ID == group_id)
+  
+  # Extract the group name for the given group_id
+  group_name <- unique(filtered_data$GROUP)
+  
+  # Convert TIME_PERIOD to factor to display all years on the x-axis
+  filtered_data <- filtered_data %>%
+    mutate(TIME_PERIOD = factor(TIME_PERIOD, levels = sort(unique(TIME_PERIOD))))
+  
+  # Create the combined plot
+  ggplot(filtered_data, aes(x = TIME_PERIOD, y = ESTIMATE, color = SUBGROUP, group = SUBGROUP)) +
+    geom_line(size = 1) +
+    geom_point(size = 1) +
+    labs(
+      title = paste("Suicide Rates by", group_name, "Over Time"),
+      x = "Year",
+      y = "Suicide Rate (per 100,000)",
+      color = "Subgroup"
+    ) +
+    scale_x_discrete(drop = FALSE) + # Ensure no levels are dropped
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_text(size = 10),
+      legend.text = element_text(size = 8),
+      axis.text.x = element_text(angle = 45, hjust = 1), # Rotate labels for better readability
+      plot.title = element_text(hjust = 0.5, size = 15)
+    )
+}
+```
+
+
+### Trend for Suicide Rate by Total population
+
+```{r}
+plot_suicide_rates_combined(data, group_id = 1,1)+
+  labs(caption = "Figure 2: Suicide Rates From 1999 to 2021 by all age")+
+  theme(plot.caption = element_text(hjust = 0.5, size = 10))
+```
+
+The graph above displays the suicide rate (per 100,000 individuals) on the y-axis over time, with the x-axis representing the years from 1999 to 2021. The trend shows a general increase in suicide rates over this period, starting at around 10.5 per 100,000 in 1999 and peaking at around 14.2 per 100,000 at 2018, followed by minor fluctuations. This upward trend indicates a concerning rise in suicide rates years by years. 
+
+### Trend for Suicide Rates by Age Group Over Time
+
+```{r}
+data_temp <- data %>%
+  filter(SUBGROUP %in% c(
+    "15-24 years", "25-34 years", "35-44 years",
+    "45-54 years", "55-64 years", "65-74 years",
+    "75-84 years", "85 years and older"
+  ))
+
+# Plot the filtered data
+plot_suicide_rates_combined(data_temp, group_id = 2,2) +
+  labs(
+    caption = "Figure 3: Suicide Rates From 1999 to 2021 by age groups 15-85+, 9 years range"
+  ) +
+  theme(
+    plot.caption = element_text(hjust = 0.5, size = 10)
+  )
+```
+
+This graph visualizes the trends in suicide rates (per 100,000 individuals) across different age groups (9 years age range) from 1999 to 2021. The x-axis represents the years, while the y-axis shows the suicide rates. 
+
+15-24 years:
+The suicide rate for this group starts relatively low in 1999 but exhibits a sharp and consistent increase, especially after 2010. This group experiences the one of the most rapid rate of growth among all age ranges. The steep rise in recent years highlights an urgent need for intervention focused on younger populations.
+
+25-34 years:
+The suicide rates are in general higher than 15-24 in each year but shows similar trends as 15-24 years, with rapid increase recent years. Reflecting stable yet consistent growth in suicide rates. This trend highlights a sustained issue for this age group, requiring ongoing attention.
+
+35-44 years:
+This group exhibits a more gradual increase over time. While the trend is upward, it shows less dramatic changes compared to younger age groups. The growth rate for this group appears stable with minor fluctuations, indicating less volatility over the years.
+
+45-54 years:
+The trend for this age group shows a stable upward movement with moderate fluctuations. Suicide rates increase gradually over time, but the growth is not as severe as in younger groups. It reach the peak around 2012, followed by a relatively steady phase and slight decrease recent years.
+
+55-64 years:
+The 55-64 years group displays a moderate upward trend similar to the 45-54 age range. Rates rise steadily over the years but without dramatic spikes. This consistent growth suggests that mid-to-late adulthood is also a critical period for preventive measures.
+
+65-74 years and 75-84 years:
+These older age groups show relatively stable trends with a moderate increase over the years. Both groups display minor fluctuations but no significant spikes. While the overall rates remain high compared to younger groups, the trends are less alarming in terms of growth rate.
+
+85 years and older:
+The oldest age group consistently has the highest overall suicide rates. Although the trend is relatively stable until 2015, there is a sharp increase in recent years, peaking significantly by 2021. This pattern suggests that late-life stressors or challenges may have intensified in recent years.
+
+ Key Concerns:
+The suicide rate among younger age groups has risen dramatically, warranting heightened attention and concern.
+
+
+```{r}
+data_temp <- data %>%
+  filter(SUBGROUP %in% c(
+    "10-14 years", "15-19 years", "20-24 years"
+  ))
+
+# Plot the filtered data
+plot_suicide_rates_combined(data_temp, group_id = 2, 2) +
+  labs(caption = "Figure 4.1: Suicide Rates From 1999 to 2021 by young age groups 10-24, 4 years range") +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10))
+```
+
+```{r}
+# Filter the data for the specific conditions
+data_fig4 <- data %>%
+  filter(
+    ESTIMATE_TYPE_ID == 2,
+    GROUP_ID == 2,
+    SUBGROUP %in% c("10-14 years", "15-19 years", "20-24 years")
+  )
+
+# Extract the group name for the given GROUP_ID
+group_name <- unique(data_fig4$GROUP)
+
+# Create the stacked bar chart
+ggplot(data_fig4, aes(x = TIME_PERIOD, y = ESTIMATE, fill = SUBGROUP)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(
+    title = paste("Suicide Rates by", group_name, "Over Time"),
+    x = "Year",
+    y = "Suicide Rate (per 100,000)",
+    fill = "Subgroup",
+    caption = "Figure 4.2: Suicide Rates From 1999 to 2021 by young age groups 10-24, 4 years range"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, size = 15),
+    plot.caption = element_text(hjust = 0.5, size = 10)
+  )
+```
+
+The suicide rates across young age groups (10-24 years) highlights a troubling pattern: older subgroups consistently experience a higher rates, reflecting significant vulnerabilities during early adulthood. The age group 15-19 take has a overall higher suicide rate than 10-14 years old in all years from 1999 to 2021, and 20-24 has a overal higher suicide rate than 15-19. At the same time, younger groups, like 10-14 years and 15-19 years, show gradual yet steady increases, signaling growing mental health challenges even at an early age. 
+
+
+### Trend for Suicide Rates by Sex Over Time
+
+```{r}
+plot_suicide_rates_combined(data, group_id = 3,1)+
+  labs(caption = "Figure 5: Suicide Rates From 1999 to 2021 by young age groups 10-24, 4 years range") +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10))
+```
+
+This updated graph provides a clearer view of the trends in suicide rates by sex from 1999 to 2021. The suicide rate for males consistently remains significantly higher than for females throughout the entire period. Male rates start at approximately 18 per 100,000 in 1999 and gradually rise, peaking around 2017-2018, before showing a slight decline and leveling off towards 2021. For females, the suicide rate starts at around 3 per 100,000 and shows a slow and steady upward trend, with minimal fluctuations. The stark disparity between male and female suicide rates highlights a persistent and significant issue, with males being at substantially higher risk. 
+
+
+### Trend for Suicide Rates by Race Over Time
+
+```{r}
+# Create a dataset with combined race groups by averaging male and female estimates
+combine_race_data <- function(data) {
+  # Filter for "sex and race" group
+  data <- data %>%
+    filter(ESTIMATE_TYPE_ID == 1)
+  
+  race_data <- data %>%
+    filter(GROUP == "Sex and race") %>%
+    mutate(Race = case_when(
+      SUBGROUP_ORDER %in% c(46, 50) ~ "American Indian and Alaska Native",
+      SUBGROUP_ORDER %in% c(47, 51) ~ "Asian or Pacific Islander",
+      SUBGROUP_ORDER %in% c(48, 52) ~ "Black",
+      SUBGROUP_ORDER %in% c(49, 53) ~ "White",
+      TRUE ~ NA_character_  # Exclude other categories
+    )) %>%
+    filter(!is.na(Race))  # Remove rows that are not part of the selected races
+  
+  # Group by Time Period and Race, then calculate the average estimate
+  combined_race_data <- race_data %>%
+    group_by(TIME_PERIOD, Race) %>%
+    summarize(Avg_Estimate = mean(ESTIMATE, na.rm = TRUE), .groups = "drop")
+  
+  return(combined_race_data)
+}
+
+# Apply the function to dataset
+race_trend_data <- combine_race_data(data)
+race_trend_data  <- race_trend_data %>%
+    mutate(TIME_PERIOD = factor(TIME_PERIOD, levels = sort(unique(TIME_PERIOD))))
+
+# Plot the trend over time by race
+ggplot(race_trend_data, aes(x = TIME_PERIOD, y = Avg_Estimate, color = Race, group = Race)) +
+  geom_line(size = 1) +
+  geom_point(size = 1) +
+  labs(
+    title = "Suicide Rates by Race Over Time",
+    x = "Year",
+    y = "Average Suicide Rate (per 100,000)",
+    color = "Race",
+    caption = "Figure 6: Suicide Rates From 1999 to 2019 by race"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, size = 15),
+    plot.caption = element_text(hjust = 0.5, size = 10)
+  )
+
+```
+
+This graph displays the trends in suicide rates across four racial groups from 1999 to 2019.
+
+ White:
+
+The White racial group consistently exhibits the highest suicide rates over the entire period. Starting at around 12 per 100,000 in 1999, the rate gradually increases over time, peaking at over 16 per 100,000 around 2017-2018 before showing a slight decline. This steady upward trend highlights significant mental health challenges within this group.
+
+ American Indian and Alaska Native:
+
+This group shows the second-highest suicide rates, starting at approximately 10 per 100,000 in 1999. While the trend remains relatively stable for much of the timeline, there is a notable spike around 2004, followed by some fluctuation and a gradual rise after 2015. The persistent high rates in this group emphasize the need for targeted mental health interventions addressing probably specific cultural and systemic challenges.
+
+ Asian or Pacific Islander:
+
+The Asian or Pacific Islander group has one of the lowest suicide rates, with values starting near 6 per 100,000 in 1999. The trend remains largely stable over the years, with only slight increases after 2014.
+
+ Black:
+
+The Black group also has lower suicide rates, similar to the Asian or Pacific Islander group, starting at approximately 6 per 100,000 in 1999. However, unlike the Asian group, this group maintains a lower suicide steadily rate over time until 2015. Then start increasing reaching nearly 7 per 100,000 by 2019. The steady rise indicates growing mental health challenges that require focused attention.
+
+
+### Trend for Suicide Rates by whether-hispanic Over Time
+
+```{r}
+# Combine Hispanic and Non-Hispanic groups by averaging their respective SUBGROUP_IDs
+hispanic_data <- data %>%
+  filter(ESTIMATE_TYPE_ID == 1)
+
+hispanic_data <- hispanic_data %>%
+  filter(SUBGROUP_ORDER %in% c(54, 55, 56, 57, 58, 59, 60, 61, 62, 63)) %>%
+  mutate(
+    Hispanic_Group = case_when(
+      SUBGROUP_ORDER %in% c(54, 59) ~ "Hispanic",
+      SUBGROUP_ORDER %in% c(55, 56, 57, 58, 60, 61, 62, 63) ~ "Non-Hispanic"
+    )
+  ) %>%
+  group_by(Hispanic_Group, TIME_PERIOD) %>%
+  summarise(
+    ESTIMATE = mean(ESTIMATE, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+hispanic_data  <- hispanic_data %>%
+    mutate(TIME_PERIOD = factor(TIME_PERIOD, levels = sort(unique(TIME_PERIOD))))
+
+
+# Plot Hispanic vs Non-Hispanic trends over time
+ggplot(hispanic_data, aes(x = TIME_PERIOD, y = ESTIMATE, color = Hispanic_Group, group = Hispanic_Group)) +
+  geom_line(size = 1) +
+  geom_point(size = 1.5) +
+  labs(
+    title = "Trends in Suicide Rates: Hispanic vs Non-Hispanic Groups",
+    x = "Year",
+    y = "Suicide Rate (per 100,000)",
+    color = "Group",
+    caption = "Figure 7: Suicide Rates From 1999 to 2019 by whether hispanic"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.caption = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 15)
+  )
+
+```
+
+This graph compares suicide rates between Hispanic and Non-Hispanic groups from 1999 to 2019. The Non-Hispanic group consistently exhibits higher suicide rates throughout the period, starting at approximately 9 per 100,000 in 1999 and gradually increasing to over 12.5 per 100,000 by 2019. In contrast, the Hispanic group (red line) maintains significantly lower suicide rates, starting at around 6 per 100,000 in 1999 and experiencing a slight but steady increase over the years, peaking at just above 7 per 100,000 by 2019. The widening gap between the two groups highlights a persistent disparity, with Non-Hispanic individuals facing significantly higher suicide risks. This trend underscores the importance of exploring cultural, social, and systemic factors that may contribute to these differences. We do some exploration in Hispanic population below.
+
+The disparity in suicide rates between Hispanic and non-Hispanic populations is influenced by a combination of cultural, social, economic, and systemic factors. In Hispanic communities, strong familial and community support, often referred to as *familismo*, plays a protective role, providing emotional and social safety nets that may reduce the risk of suicide. Religious beliefs, particularly within Catholicism, often discourage suicide, adding another layer of protection. However, cultural stigma around mental health often prevents open discussion and limits access to mental health resources, which can both suppress suicide risk and lead to underreporting.
+
+Economic challenges also contribute to these differences. Many Hispanic individuals face lower income levels, unstable employment, and limited access to healthcare, which can exacerbate mental health issues while also restricting their documentation and treatment. For Hispanic immigrants, acculturation stress, discrimination, and immigration-related fears add further mental health burdens. Among Hispanic youth, acculturation gaps between parents and children can lead to family conflict, which has been linked to higher suicide risk, particularly among second-generation youth.
+
+The term *Hispanic* encompasses diverse populations, and suicide risk factors vary among subgroups. For instance, Puerto Ricans have been reported to experience higher suicide rates, particularly among youth, due to economic and social challenges. Conversely, Cuban Americans often display lower rates, possibly due to stronger economic stability and established community networks. Mexican Americans, the largest Hispanic group in the U.S., are heavily studied, with risk factors often tied to immigration and acculturation dynamics.
+
+In summary, the lower suicide rates in Hispanic populations reflect protective cultural factors such as strong familial bonds and religious beliefs. However, socioeconomic challenges, acculturation stress, and limited access to mental health resources pose significant risks, particularly for certain subgroups and second-generation immigrants. Addressing these disparities requires culturally sensitive interventions, expanded mental health resources, and programs that strengthen family and community cohesion.
+
+
+## Correlation Exploration for 2021 Data
+
+```{r}
+data_2021 <- data %>%
+  filter(TIME_PERIOD == 2021)
+```
+
+### Data Recombination
+
+```{r}
+# Cutout and encode the dataset 
+# Process the data to add the new columns
+data_2021_10 <- data_2021 |>
+  filter(GROUP_ID == 10) |>
+  mutate(
+    # Add the 'female' column
+    sex = ifelse(grepl("Female", SUBGROUP, ignore.case = TRUE), 'Female',
+             ifelse(grepl("Male", SUBGROUP, ignore.case = TRUE), 'Male', NA)),
+    
+    # Add the 'race' column
+    race = case_when(
+      grepl("Asian", SUBGROUP, ignore.case = TRUE) ~ "Asian",
+      grepl("Black", SUBGROUP, ignore.case = TRUE) ~ "Black",
+      grepl("Native Hawaiian or Other Pacific Islander", SUBGROUP, ignore.case = TRUE) ~ "Native Hawaiian or Other Pacific Islander",
+      grepl("White", SUBGROUP, ignore.case = TRUE) ~ "White",
+      grepl("American Indian and Alaska Native", SUBGROUP, ignore.case = TRUE) ~ "American Indian and Alaska Native",
+      grepl("Hispanic", SUBGROUP, ignore.case = TRUE) ~ "Hispanic",
+      TRUE ~ "Other"
+    ),
+    
+    # Add the 'age_range' column
+    age_range = case_when(
+      grepl("15-24", SUBGROUP, ignore.case = TRUE) ~ "15-24",
+      grepl("25-44", SUBGROUP, ignore.case = TRUE) ~ "25-44",
+      grepl("45-64", SUBGROUP, ignore.case = TRUE) ~ "45-64",
+      grepl("65", SUBGROUP, ignore.case = TRUE) ~ "65 and older",
+      TRUE ~ "Other"
+    )
+  )
+
+# Remove useless columns
+data_2021_10 <- subset(data_2021_10, select = c(SUBGROUP,SUBGROUP_ID,SUBGROUP_ORDER,ESTIMATE,sex,age_range,race))
+
+```
+
+To focus on the latest trends and explore the correlation between different division and suicide rate, we extracted data from the year 2021 from the dataset. This subset, data_2021, was then further refined to include only the data corresponding to a specific GROUP_ID (Eliminate overlapping relation inside the column by selecting a specific group) and underwent several transformations to enhance its usability and analytical clarity. Specifically, new columns were added to encode key demographic attributes:
+
+1. A sex column was created to classify subgroups as "Male" or "Female" based on the SUBGROUP text.
+
+2. A race column was added to categorize individuals into racial groups and origin (e.g., Asian, Black, White, Hispanic) or mark them as "Other" when no clear racial identifier was present based on the SUBGROUP text. 
+(Given the selected GROUP_ID, the subgroups available include information on sex, race and Hispanic origin (single race), and age group. In the data, individuals identified as non-Hispanic belong to specific racial groups, while those identified as Hispanic represent a general category encompassing all races. Due to this structure, we treat "Hispanic" as an independent category, separate from the specific race groups within the non-Hispanic classification, to account for the unique nature of this division.)
+
+3. An age_range column was introduced to group individuals into predefined age ranges (e.g., 15-24, 25-44, etc.) using pattern matching on SUBGROUP text.(age range suggest that this estimate type for estimate will be crude)
+
+Finally, unnecessary columns were removed to streamline the dataset, leaving only the essential fields: SUBGROUP, SUBGROUP_ID, SUBGROUP_ORDER, ESTIMATE, sex, age_range, and race. The resulting dataset, data_2021_10, is more concise and organized, facilitating deeper analysis of demographic patterns within a targeted subgroup for the year 2021.
+
+```{r}
+head(data_2021_10)
+```
+
+
+### Suicide Rate vs Sex, 2021
+
+```{r}
+ggplot(data_2021_10, aes(x = as.factor(sex), y = ESTIMATE, fill = as.factor(sex))) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Suicide Rates by Sex in 2021",
+    x = "Sex (0 = Male, 1 = Female)",
+    y = "Suicide Rate (per 100,000)",
+    fill = "Sex",
+    caption = "Figure 8: Boxplots for Suicide Rates by sex in 2021"
+  ) +
+  theme_minimal()+
+  theme( legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.caption = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 15))
+```
+
+This boxplot shows that median suicide rate is significantly higher for males, as depicted by the central line within the male boxplot, which lies far above the female median. The male distribution exhibits a larger interquartile range, indicating greater variability in suicide rates compared to females, whose rates cluster tightly around the lower end. Outliers in both groups reflect extreme cases, with males showing outliers above 80 per 100,000, underscoring their elevated risk. 
+
+```{r}
+# Categorize suicide rates into "High" and "Low" based on the median
+data_2021_10 <- data_2021_10 %>%
+  mutate(rate_level = ifelse(ESTIMATE > mean(ESTIMATE, na.rm = TRUE), "High than average", "Low than average"))
+
+
+# Create the mosaic plot
+ggplot(data_2021_10) +
+  geom_mosaic(aes(x = product(sex), fill = rate_level, weight = 1)) +
+  labs(
+    title = "Mosaic Plot of Suicide Rate Levels by Sex",
+    x = "Sex",
+    y = "Proportion",
+    fill = "Suicide Rate Level",
+    caption = "Figure 9: Mosaic for whether suicide rate exceed average by sex in 2021"
+    
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 15),
+    plot.caption = element_text(hjust = 0.5, size = 10),
+    axis.text.x = element_text(size = 12),
+    legend.position = "bottom"
+  )
+```
+
+The mosaic plot highlights the correlation between sex and suicide rate levels, dividing individuals into categories of "high than average" and "low than average" suicide rates for 2021. The data shows a notable gender disparity: the majority of males fall into the "high than average" category, indicating that males are significantly more likely to have above-average suicide rates. In contrast, females predominantly fall into the "low than average" category, suggesting lower susceptibility to high suicide rates. This visualization underscores a strong association between being male and elevated suicide risk, emphasizing the need for sex-specific prevention strategies to address this disparity.
+
+### Suicide Rate vs Race & Origin, 2021
+
+```{r}
+ggplot(data_2021_10, aes(x = race, y = ESTIMATE, fill = race)) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Suicide Rates by Race in 2021",
+    x = "Race",
+    y = "Suicide Rate (per 100,000)",
+    fill = "Race",
+    caption = "Figure 10: Boxplot of Suicide Rate for 6 race and origin in 2021"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15),
+        plot.caption = element_text(hjust = 0.5, size = 10),
+    )
+```
+
+The boxplot illustrates the variation in suicide rates across different racial groups in 2021. American Indian and Alaska Native individuals have the highest median suicide rate, with a wide interquartile range and several outliers exceeding 60 per 100,000, highlighting this group as particularly vulnerable. White individuals also exhibit high suicide rates, with a high median and considerable variability. In contrast, Asian, Black and Hispanic groups demonstrate lower median suicide rates, with tighter interquartile ranges and minimal variability, indicating relatively consistent and lower suicide risks. Native Hawaiian or Other Pacific Islander group has the highest median, but the tightest IQR, which mainly becuase the missing value in this category.
+
+```{r}
+# Function to create a mosaic plot for a given binary column
+create_mosaic_by_rate <- function(data, binary_column, title) {
+  ggplot(data) +
+    geom_mosaic(aes(x = product(!!sym(binary_column)), fill = rate_level, weight = ESTIMATE)) +
+    labs(
+      title = title,
+      x = paste(binary_column, "(0 = No, 1 = Yes)"),
+      y = "Proportion",
+      fill = "Suicide Rate Level"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 8), # Smaller title size
+      axis.title.x = element_text(size = 6), # Smaller x-axis title size
+      axis.title.y = element_text(size = 6), # Smaller y-axis title size
+      axis.text.x = element_text(size = 4.5),  # Smaller x-axis label size
+      axis.text.y = element_text(size = 4.5),  # Smaller y-axis label size
+      legend.title = element_text(size = 6), # Smaller legend title
+      legend.text = element_text(size = 4.5)   # Smaller legend text
+    )
+}
+
+data_2021_10 <- data_2021_10 %>%
+  mutate(
+    is_hispanic = ifelse(race == "Hispanic", 1, 0),
+    is_white = ifelse(race == "White", 1, 0),
+    is_black = ifelse(race == "Black", 1, 0),
+    is_asian = ifelse(race == "Asian", 1, 0),
+    is_pacific_islander = ifelse(race == "Native Hawaiian or Other Pacific Islander", 1, 0),
+    is_native_american = ifelse(race == "American Indian and Alaska Native", 1, 0)
+  )
+
+# Create mosaic plots for each binary column
+plot_hispanic <- create_mosaic_by_rate(data_2021_10, "is_hispanic", "Hispanic")
+plot_white <- create_mosaic_by_rate(data_2021_10, "is_white", "White")
+plot_black <- create_mosaic_by_rate(data_2021_10, "is_black", "Black")
+plot_asian <- create_mosaic_by_rate(data_2021_10, "is_asian", "Asian")
+plot_pacific <- create_mosaic_by_rate(data_2021_10, "is_pacific_islander", "Pacific Islander")
+plot_native <- create_mosaic_by_rate(data_2021_10, "is_native_american", "Native American")
+
+# Arrange all plots in a grid layout
+grid.arrange(
+  arrangeGrob(
+    plot_hispanic, plot_white, plot_black, plot_asian,plot_pacific,plot_native,
+    ncol = 2,
+    top = textGrob(
+      "Mosaic Plots of Suicide Rate Levels by Race and origin Groups",
+      gp = gpar(fontsize = 15)
+    ),
+    bottom = textGrob(
+      "Figure 11: Proportion of suicide rates above or below median for different race groups (2021)",
+      gp = gpar(fontsize = 10)
+    )
+  )
+)
+```
+
+The mosaic plots demonstrate varying correlations between suicide rate levels and racial groups, emphasizing disparities in vulnerability. 
+
+ Native Americans
+show a strong association with higher suicide rates, as a significant proportion of this group falls into the "high than average" category, indicating a strong correlation between belonging to this race and elevated suicide risk. 
+
+ Whites
+exhibit a more balanced distribution, but a slightly higher proportion of individuals are in the "high than average" category, suggesting a moderate correlation between race and suicide risk for this group.
+
+ Asians
+display the opposite trend, with a large majority in the "low than average" category, indicating a negative correlation between being Asian and higher suicide rates. 
+
+ Hispanics
+have a similar pattern as Asian. Larger proportion of individuals in the "low than average" category, though the correlation appears weaker compared to Asians. 
+
+ Blacks
+slightly higher fall into the "low than average" category than non-Black, highlighting a moderate negative correlation between being Black and elevated suicide risk. 
+
+ Pacific Islanders
+have a relatively even distribution, showing a weaker correlation overall. 
+
+### Suicide Rate vs Age range, 2021
+
+```{r}
+ggplot(data_2021_10, aes(x = age_range, y = ESTIMATE, fill = age_range)) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Suicide Rates by Age Range in 2021",
+    x = "Age Range",
+    y = "Suicide Rate (per 100,000)",
+    fill = "Age Range",
+    caption = "Figure 12: Boxplot of Suicide Rate for 4 Age Range in 2021"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15),
+        plot.caption = element_text(hjust = 0.5, size = 10),)
+```
+
+The boxplot reveals distinct characteristics of suicide rates across age ranges in 2021. The 15-24 years group shows a relatively narrow IQR with a median around 15-20 per 100,000 and a few extreme outliers. The 25-44 years group exhibits the highest variability with a wider IQR, a higher median near 25 per 100,000, and notable outliers extending above 80; the 45-64 years group has the lowest and tightest distribution with a median below 20 per 100,000 and less pronounced outliers; and the 65 and older group demonstrates a similar median to the 45-64 range but with greater variability and some higher-risk outliers above 40.
+
+```{r}
+data_2021_10 <- data_2021_10 %>%
+  mutate(
+    is_15_24 = ifelse(age_range == "15-24", 1, 0),
+    is_25_44 = ifelse(age_range == "25-44", 1, 0),
+    is_45_64 = ifelse(age_range == "45-64", 1, 0),
+    is_65_plus = ifelse(age_range == "65 and older", 1, 0)
+  )
+
+create_mosaic_by_age <- function(data, binary_column, title) {
+  ggplot(data) +
+    geom_mosaic(aes(x = product(!!sym(binary_column)), fill = rate_level, weight = ESTIMATE)) +
+    labs(
+      title = title,
+      x = paste(binary_column, "(0 = No, 1 = Yes)"),
+      y = "Proportion",
+      fill = "Suicide Rate Level"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 8), # Smaller title size
+      axis.title.x = element_text(size = 6), # Smaller x-axis title size
+      axis.title.y = element_text(size = 6), # Smaller y-axis title size
+      axis.text.x = element_text(size = 4.5),  # Smaller x-axis label size
+      axis.text.y = element_text(size = 4.5),  # Smaller y-axis label size
+      legend.title = element_text(size = 6), # Smaller legend title
+      legend.text = element_text(size = 4.5)   # Smaller legend text
+    )
+}
+
+# Create mosaic plots for each age range binary column
+plot_15_24 <- create_mosaic_by_age(data_2021_10, "is_15_24", "15-24 Years")
+plot_25_44 <- create_mosaic_by_age(data_2021_10, "is_25_44", "25-44 Years")
+plot_45_64 <- create_mosaic_by_age(data_2021_10, "is_45_64", "45-64 Years")
+plot_65_plus <- create_mosaic_by_age(data_2021_10, "is_65_plus", "65 and Older")
+
+# Arrange all plots in a grid layout
+grid.arrange(
+  arrangeGrob(
+    plot_15_24, plot_25_44, plot_45_64, plot_65_plus,
+    ncol = 2,
+    top = textGrob(
+      "Mosaic Plots of Suicide Rate Levels by Age Groups",
+      gp = gpar(fontsize = 12)
+    ),
+    bottom = textGrob(
+      "Figure 13: Proportion of suicide rates above or below median for different age groups (2021)",
+      gp = gpar(fontsize = 8)
+    )
+  )
+)
+```
+
+The mosaic plots analyze the correlation between age groups and suicide rate levels (above or below the average) in 2021. For the 15-24 years group, a higher proportion falls into the "high than average" category, suggesting a positive correlation between being in this age group and elevated suicide rates. Similarly, the 25-44 years group also shows a slightly stronger proportion in the "high than average" category, reinforcing a moderate correlation between this age group and higher suicide rates.
+
+In contrast, the 45-64 years group has a more balanced distribution but leans slightly towards the "low than average" category, indicating a weak negative correlation between this age group and high suicide rates. Finally, the 65 and older group moderately falls into the "low than average" category, showing a moderate negative correlation between being in this age group and elevated suicide rates.
+
+These findings reveal that younger age groups (15-24 and 25-44) are more prone to higher-than-average suicide rates, whereas middle-aged and older individuals (45-64 and 65+) are less likely to exceed the average suicide rate, highlighting distinct age-related risk patterns.
+
+### Suicide Rate vs Sex + Age + Race
+
+```{r, fig.height=9,fig.width=7}
+# Replace -1 with NA
+data_2021_10 <- data_2021_10 %>%
+  mutate(ESTIMATE = ifelse(ESTIMATE == -1, NA, ESTIMATE))
+
+create_heatmap_by_sex <- function(data, sex_filter) {
+  ggplot(data %>% filter(sex == sex_filter), aes(x = race, y = age_range, fill = ESTIMATE)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "yellow", high = "darkred", na.value = "white", name = "Suicide Rate") +
+    labs(
+      title = paste("Heatmap of Suicide Rates by Age Range and Race (Sex:", ifelse(sex_filter == 0, "Male", "Female"), ")"),
+      x = "Race",
+      y = "Age Range"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 12), # Reduce title size
+      axis.text.x = element_text(size = 8, angle = 45, hjust = 1), # Smaller x-axis labels
+      axis.text.y = element_text(size = 8), # Smaller y-axis labels
+      axis.title.x = element_text(size = 10), # Smaller x-axis title
+      axis.title.y = element_text(size = 10), # Smaller y-axis title
+      plot.caption = element_text(size = 8, hjust = 0.5), # Smaller caption
+      plot.margin = margin(5, 5, 5, 5) # Reduce margins
+    )
+}
+
+# Generate heatmaps for male and female
+heatmap_male <- create_heatmap_by_sex(data_2021_10, sex_filter = "Male") +
+  labs(caption = "Figure 14: Proportion of suicide rates across age and racial groups for males and females in 2021. Blank areas indicate missing data.")
+heatmap_female <- create_heatmap_by_sex(data_2021_10, sex_filter = "Female")+
+  labs(caption = "Figure 15: Proportion of suicide rates across age and racial groups for males and females in 2021. Blank areas indicate missing data.")
+
+# Arrange the plots in a grid with reduced size
+grid.arrange(
+  heatmap_male,
+  heatmap_female,
+  ncol = 1,
+  heights = c(1, 1) # Adjust heights for a more compact layout
+)
+
+```
+
+The heatmaps provide insights into suicide rates segmented by race, age range, and sex, highlighting variations across these factors. For females, the highest suicide rates are observed among American Indian and Alaska Native women in the 25-44 age range, and the second highest is the women in 15-24 in that race. Women in white with 45-64 and 25-44 also have a relatively high suicide rate. For males, the highest suicide rates are likely among American Indian and Alaska Native men in the 25-44 age range and 15-24 age, with White men also exhibiting relatively high rates in all age range, especially for the 45-64 and 65 and older categories. Native Hawaiian from 25 to 44 also shows a relatively high rate. 
+
+```{r}
+# Prepare data for the alluvial diagram
+alluvial_data <- data_2021_10 %>%
+  mutate(rate_level = ifelse(ESTIMATE > median(ESTIMATE, na.rm = TRUE), "Higher than average", "Lower than average")) %>%
+  select(rate_level, sex, age_range, race) %>%
+  filter(!is.na(rate_level), !is.na(sex), !is.na(age_range), !is.na(race))
+
+# Wrap long text in the race column
+alluvial_data <- alluvial_data %>%
+  mutate(race = gsub(" and ", "\n", race))
+
+# Create the alluvial diagram
+ggplot(alluvial_data, aes(axis1 = sex, axis2 = age_range, axis3 = race, y = 1, fill = rate_level)) +
+  geom_alluvium(aes(fill = rate_level)) +
+  geom_stratum(width = 1/2, fill = "white", color = "black") +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3) +
+  scale_x_discrete(limits = c("Sex", "Age Range", "Race"), expand = c(0.1, 0.1)) +
+  scale_fill_manual(values = c("Higher than average" = "orange", "Lower than average" = "green")) +
+  labs(
+    title = "Alluvial Diagram of Suicide Rates by Sex, Age, and Race",
+    caption = "Figure 16: the flow of suicide rates categorized as high or low across sex, age range, and race",
+    x = "Demographic Factors",
+    y = "Count",
+    fill = "Rate Level"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.text.x = element_text(size = 10),
+    plot.caption = element_text(size = 9, hjust = 0.5)
+  )
+```
+
+
+From the alluvial diagram, we can see that females are predominantly associated with lower suicide rates across all age ranges and racial groups, with only a small proportion linked to higher rates. The only two high rate flow is to 15-24 and 25-44 age American Indian & Alaska Native.In contrast, males display a notable concentration of high suicide rates overall. The only three low rate flow is to 45-64 Asian and 65 older Blakc and Asian. The diagram also emphasizes that the 45-64 and 65 older age ranges tend to have relatively low suicide rates across both sexes and races, whereas the 25-44 and 15-24 age ranges exhibit more variability and higher rates for specific demographics. 
+
+
+
+
+
+
+
+
+
+
+
+
