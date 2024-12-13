@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,7 +81,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -90,11 +96,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
-
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
@@ -107,13 +114,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -122,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Exploratory Analysis on Suicide Death Rate</a> 
@@ -171,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -204,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#suicide-rate-vs-sex-age-race" id="toc-suicide-rate-vs-sex-age-race" class="nav-link" data-scroll-target="#suicide-rate-vs-sex-age-race"><span class="header-section-number">3.4.5</span> Suicide Rate vs Sex + Age + Race</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zoehahaha/SuicideDeathRate.git/edit/main/results.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zoehahaha/SuicideDeathRate.git/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/zoehahaha/SuicideDeathRate.git/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/zoehahaha/SuicideDeathRate.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -224,11 +231,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
 
-<p>In this project. Our focus will be on three part: the interlace hierarchy of our dataset, time series trend, correlation detection. We will analyze the horizontal trends from 1999 to 2021 and delve deeper into the vertical dimension by focusing on the most recent year in the dataset, 2021. In examining the time series trends, we will explore how different categories have evolved over time. For the single year of 2021, we will investigate the correlation between various categories and the suicide rate.</p>
+
+<p>In this project. Our focus will be on three part: the interlace hierarchy of our dataset, time series trend, and correlation detection. We will analyze the horizontal trends from 1999 to 2021 and delve deeper into the vertical dimension by focusing on the most recent year in the dataset, 2021. In examining the time series trends, we will explore how different categories have evolved over time. For the single year of 2021, we will investigate the suicide rates’ difference in various categories.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.tree)</span>
@@ -250,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"DQS_Death_rates_for_suicide__by_sex__race__Hispanic_origin__and_age__United_States_from_CDC_WONDER_20241119.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -260,7 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="handle-missing-columns-and-values" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="handle-missing-columns-and-values"><span class="header-section-number">3.1.1</span> Handle missing columns and values</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove 'SUBTOPIC', 'SUBTOPIC_ID', 'FLAG','FOOTNOTE_ID_LIST'</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(SUBTOPIC, SUBTOPIC_ID, FLAG,TOPIC))</span>
@@ -273,9 +282,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>As part of the data preprocessing stage, we identified missing values that need to be addressed before proceeding with analysis. For the completely blank columns, namely ‘SUBTOPIC’, ‘SUBTOPIC_ID’, and ‘FLAG’, we will remove them entirely as they do not provide any useful information. Also for the Column ‘TOPIC’, values for each row are same (value = “Death rates for suicide”) which is not useful. Therefore we will remove ‘TOPIC’ column as well.</p>
-<p>For rows with missing values in the ‘ESTIMATE’ column, we will replace the missing values with -1 instead of removing the rows. This approach is taken because each row in our dataset contains unique and critical information about a specific subgroup in a given year. Removing such rows could result in the complete loss of information for certain subgroups. Since ‘ESTIMATE’ values must be greater than zero, using -1 will clearly indicate missing data without overlapping with valid entries. We will apply the same method to handle missing values in the ‘STANDARD_ERROR’, ‘ESTIMATE_UCI’, and ‘ESTIMATE_LCI’ columns.</p>
-<p>After checking, there are no missing value in the dataset now.</p>
+<p>As part of the data preprocessing stage, we identified missing values that need to be addressed before proceeding with analysis. For the completely blank columns, namely ‘SUBTOPIC’, ‘SUBTOPIC_ID’, and ‘FLAG’, we will remove them entirely as they do not provide any useful information. Also for the Column ‘TOPIC’, values for each row are the same (value = “Death rates for suicide”) which is not useful. Therefore we will remove ‘TOPIC’ column as well.</p>
+<p>For rows with missing values in the ‘ESTIMATE’ column, we will replace the missing values with -1 instead of removing the rows. This approach is taken because each row in our dataset contains unique and critical information about a specific subgroup in a given year. Removing such rows could result in the complete loss of information for certain subgroups. Since ‘ESTIMATE’ values are naturally greater than zero, using -1 will clearly indicate missing data without overlapping with valid entries. We will apply the same method to handle missing values in the ‘STANDARD_ERROR’, ‘ESTIMATE_UCI’, and ‘ESTIMATE_LCI’ columns.</p>
+<p>After preprocessing, we have a neat and clean dataset to continue on.</p>
 </section>
 </section>
 <section id="hierarchy-data" class="level2" data-number="3.2">
@@ -283,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="levels-of-essential-columns" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="levels-of-essential-columns"><span class="header-section-number">3.2.1</span> Levels of essential columns</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the maximum number of levels across all categories</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>max_levels <span class="ot">&lt;-</span> <span class="fu">max</span>(</span>
@@ -328,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output-display">
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
-<table class="table table-striped table-hover table-condensed table-sm small" data-quarto-postprocess="true">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
 <colgroup>
 <col style="width: 16%">
 <col style="width: 16%">
@@ -1888,15 +1897,15 @@ Levels in Data Columns
 
 </div>
 </div>
-<p>After the data cleaning process, the dataset consists of 3,786 rows and 17 columns. Among these 17 columns, 5 are categorical variables, and 12 are numerical variables. Within the numerical columns, 6 serve as corresponding series numbers linked to specific categorical columns, essentially acting as identifiers or keys. Therefore, the columns we focus on, which provide the most valuable insights, include the categorical variables: ESTIMATE_TYPE, CLASSIFICATION, GROUP, SUBGROUP, and TIME_PERIOD, as well as the key numerical variable ESTIMATE.</p>
+<p>After the data cleaning process, the dataset consists of 3,786 rows and 17 columns. Among these 17 columns, 5 are categorical variables and 12 are numerical variables. Within the numerical columns, 6 serve as corresponding series numbers linked to specific categorical columns, essentially acting as identifiers or keys. Therefore, the columns we focus on, which provide the most valuable insights, include the categorical variables: ESTIMATE_TYPE, CLASSIFICATION, GROUP, SUBGROUP, and TIME_PERIOD, as well as the key numerical variable ESTIMATE.</p>
 <p>The table above illustrates the levels within the categorical variables, highlighting their variety and structure. Upon closer examination, we observed a hierarchical relationship among some columns. Specifically, the GROUP column serves as a subdivision of CLASSIFICATION, while SUBGROUP represents a further division of GROUP. This hierarchy reflects the nested nature of these variables and provides a structured way to organize and interpret the data. For example, a single CLASSIFICATION may encompass multiple GROUPS, and each GROUP can be broken down into several SUBGROUPS.</p>
 <p>In addition to the hierarchical relationships, there are also overlaps, inclusions, and disjoint relationships within certain columns, particularly in the GROUP and SUBGROUP variables. These relationships make the dataset more complex, as some groups or subgroups may belong to multiple categories, while others are entirely distinct. The overlapping for SUBGROUP column is introduced by the GROUP columns due the horizontally hierarchy, so we can use GROUP column as key when we want to choose any specific SUBGROUP for analysis. In general, overlapping and inclusion can introduce ambiguity if not carefully understood and managed.</p>
-<p>Understanding the hierarchy and relationships within the dataset is crucial for extracting the most relevant and accurate information. It helps maintains clarity on how CLASSIFICATION, GROUP, and SUBGROUP interact allows us to accurately group and segment the data to explore different questions, identify trends, and derive insights. This structured approach to understanding the dataset lays a strong foundation for conducting reliable analysis and presenting clear, effective visualizations.</p>
+<p>Understanding the hierarchy and relationships within the dataset is crucial for extracting the most relevant and accurate information. It helps maintains clarity on how CLASSIFICATION, GROUP, and SUBGROUP interact allows us to accurately group and segment the data to explore different questions, identify trends, and derive insights. This structured approach to understanding the dataset lays a strong foundation for conducting reliable analysis and presenting effective visualizations.</p>
 </section>
 <section id="static-hierarchy-visualization-tree-diagram" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="static-hierarchy-visualization-tree-diagram"><span class="header-section-number">3.2.2</span> Static Hierarchy Visualization (Tree Diagram)</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for hierarchy</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hierarchy_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
@@ -1959,10 +1968,14 @@ Levels in Data Columns
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="1440"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
 </div>
 </div>
-<p>We can use tree diagram to effectively visualizes the hierarchical structure between columns of the dataset, illustrating the relationships between different levels: from the dataset as a whole to classifications, groups, and subgroups. By breaking down the dataset into its hierarchical components, the diagram provides clarity on how data is organized and structured, highlighting the nested relationships between categories. One notable adjustment in the visualization is the representation of the GROUP to SUBGROUP layer. Instead of listing all 201 branches from the group layer to the subgroup layer—which would overwhelm the visualization—we aggregate this complexity by summarizing the number of subgroups for each group. This approach enhances readability and ensures that the graph remains clean and interpretable. In the figure 1 in the Interactive graph part, there is a more detailed and comprehensive tree diagram. Due to the benefits animation, the branch is more readable.</p>
+</div>
+<p>We can use tree diagram to effectively visualizes the hierarchical structure between columns of the dataset, illustrating the relationships between different levels: from the dataset as a whole to classifications, groups, and subgroups. By breaking down the dataset into its hierarchical components, the diagram provides clarity on how data is organized and structured. One notable adjustment in the visualization is the representation of the GROUP to SUBGROUP layer. Instead of listing all 201 branches from the group layer to the subgroup layer—which would overwhelm the visualization—we aggregate this complexity by summarizing the number of subgroups for each group. This approach enhances readability and ensures that the graph remains clean and interpretable. In the Figure 1 in the interactive graph part, there is a more detailed and comprehensive tree diagram. Due to the benefits animation, the branch is more readable.</p>
 </section>
 </section>
 <section id="trends-over-time" class="level2" data-number="3.3">
@@ -1970,7 +1983,7 @@ Levels in Data Columns
 <p>In this section, we will analyze the trends in suicide rates over time under various divisions (total, age groups, genders, racial categories). This approach will help us identify temporal patterns and any significant disparities or shifts within these divisions, offering insights into how suicide rates have evolved and how they differ across subpopulations. By leveraging both crude and age-adjusted rates appropriately, we aim to present a comprehensive and balanced view of these trends.</p>
 <p>Crude suicide rate refers to the total number of suicides per 100,000 individuals in a population without accounting for differences in age distribution. It provides a direct measure of the overall suicide rate within a population. On the other hand, the age-adjusted suicide rate adjusts for variations in the age structure of different populations, allowing for fairer comparisons across populations with different age distributions or over time as a population’s age composition changes. For this analysis, we will use the crude suicide rate when visualizing suicide rates across specific age ranges, as it directly reflects the raw rates within those categories. However, for broader comparisons and understanding trends over time across different groups or divisions, the age-adjusted rate is more appropriate as it minimizes the confounding effect of age structure, providing a clearer picture of trends unaffected by demographic differences.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function to plot suicide rates by subgroup without faceting</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plot_suicide_rates_combined <span class="ot">&lt;-</span> <span class="cf">function</span>(data, group_id, type_id) {</span>
@@ -2014,22 +2027,26 @@ Levels in Data Columns
 <section id="trend-for-suicide-rate-by-total-population" class="level3" data-number="3.3.1">
 <h3 data-number="3.3.1" class="anchored" data-anchor-id="trend-for-suicide-rate-by-total-population"><span class="header-section-number">3.3.1</span> Trend for Suicide Rate by Total population</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_suicide_rates_combined</span>(data, <span class="at">group_id =</span> <span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"Figure 2: Suicide Rates From 1999 to 2021 by all age"</span>)<span class="sc">+</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>The graph above displays the suicide rate (per 100,000 individuals) on the y-axis over time, with the x-axis representing the years from 1999 to 2021. The trend shows a general increase in suicide rates over this period, starting at around 10.5 per 100,000 in 1999 and peaking at around 14.2 per 100,000 at 2018, followed by minor fluctuations. This upward trend indicates a concerning rise in suicide rates years by years.</p>
+</div>
+<p>The graph above displays the suicide rate (per 100,000 individuals) on the y-axis over time, with the x-axis representing the years from 1999 to 2021. The trend shows a general increase in suicide rates over this period, starting at around 10.5 per 100,000 in 1999 and peaking at around 14.2 per 100,000 at 2018, followed by minor fluctuations. This upward trend indicates a concerning rise in suicide rates nowadays.</p>
 </section>
 <section id="trend-for-suicide-rates-by-age-group-over-time" class="level3" data-number="3.3.2">
 <h3 data-number="3.3.2" class="anchored" data-anchor-id="trend-for-suicide-rates-by-age-group-over-time"><span class="header-section-number">3.3.2</span> Trend for Suicide Rates by Age Group Over Time</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_temp <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SUBGROUP <span class="sc">%in%</span> <span class="fu">c</span>(</span>
@@ -2048,20 +2065,26 @@ Levels in Data Columns
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This graph visualizes the trends in suicide rates (per 100,000 individuals) across different age groups (9 years age range) from 1999 to 2021. The x-axis represents the years, while the y-axis shows the suicide rates.</p>
-<p><strong>15-24 years</strong>: The suicide rate for this group starts relatively low in 1999 but exhibits a sharp and consistent increase, especially after 2010. This group experiences the one of the most rapid rate of growth among all age ranges. The steep rise in recent years highlights an urgent need for intervention focused on younger populations.</p>
-<p><strong>25-34 years</strong>: The suicide rates are in general higher than 15-24 in each year but shows similar trends as 15-24 years, with rapid increase recent years. Reflecting stable yet consistent growth in suicide rates. This trend highlights a sustained issue for this age group, requiring ongoing attention.</p>
-<p><strong>35-44 years</strong>: This group exhibits a more gradual increase over time. While the trend is upward, it shows less dramatic changes compared to younger age groups. The growth rate for this group appears stable with minor fluctuations, indicating less volatility over the years.</p>
-<p><strong>45-54 years</strong>: The trend for this age group shows a stable upward movement with moderate fluctuations. Suicide rates increase gradually over time, but the growth is not as severe as in younger groups. It reach the peak around 2012, followed by a relatively steady phase and slight decrease recent years.</p>
-<p><strong>55-64 years</strong>: The 55-64 years group displays a moderate upward trend similar to the 45-54 age range. Rates rise steadily over the years but without dramatic spikes. This consistent growth suggests that mid-to-late adulthood is also a critical period for preventive measures.</p>
-<p><strong>65-74 years and 75-84 years</strong>: These older age groups show relatively stable trends with a moderate increase over the years. Both groups display minor fluctuations but no significant spikes. While the overall rates remain high compared to younger groups, the trends are less alarming in terms of growth rate.</p>
-<p><strong>85 years and older</strong>: The oldest age group consistently has the highest overall suicide rates. Although the trend is relatively stable until 2015, there is a sharp increase in recent years, peaking significantly by 2021. This pattern suggests that late-life stressors or challenges may have intensified in recent years.</p>
-<p><strong>Concerns</strong>: The suicide rate among younger age groups has risen dramatically, warranting heightened attention and concern.</p>
+<ul>
+<li><p><strong>15-24 years</strong>: The suicide rate for this group starts relatively low in 1999 but exhibits a sharp and consistent increase, especially after 2010. This group experiences the one of the most rapid rate of growth among all age ranges. The steep rise in recent years highlights an urgent need for intervention focused on younger populations.</p></li>
+<li><p><strong>25-34 years</strong>: The suicide rates are in general higher than 15-24 in each year but shows similar trends as 15-24 years, with rapid increase recent years. Reflecting stable yet consistent growth in suicide rates. This trend highlights a sustained issue for this age group, requiring ongoing attention.</p></li>
+<li><p><strong>35-44 years</strong>: This group exhibits a more gradual increase over time. While the trend is upward, it shows less dramatic changes compared to younger age groups. The growth rate for this group appears stable with minor fluctuations, indicating less volatility over the years.</p></li>
+<li><p><strong>45-54 years</strong>: The trend for this age group shows a stable upward movement with moderate fluctuations. Suicide rates increase gradually over time, but the growth is not as severe as in younger groups. It reach the peak around 2012, followed by a relatively steady phase and slight decrease recent years.</p></li>
+<li><p><strong>55-64 years</strong>: The 55-64 years group displays a moderate upward trend similar to the 45-54 age range. Rates rise steadily over the years but without dramatic spikes. This consistent growth suggests that mid-to-late adulthood is also a critical period for preventive measures.</p></li>
+<li><p><strong>65-74 years and 75-84 years</strong>: These older age groups show relatively stable trends with a moderate increase over the years. Both groups display minor fluctuations but no significant spikes. While the overall rates remain high compared to younger groups, the trends are less alarming in terms of growth rate.</p></li>
+<li><p><strong>85 years and older</strong>: The oldest age group consistently has the highest overall suicide rates. Although the trend is relatively stable until 2015, there is a sharp increase in recent years, peaking significantly by 2021. This pattern suggests that late-life stressors or challenges may have intensified in recent years.</p></li>
+<li><p><strong>Concerns</strong>: The suicide rate among younger age groups has risen dramatically, warranting heightened attention and concern.</p></li>
+</ul>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_temp <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SUBGROUP <span class="sc">%in%</span> <span class="fu">c</span>(</span>
@@ -2074,11 +2097,15 @@ Levels in Data Columns
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the data for the specific conditions</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data_fig4 <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
@@ -2112,30 +2139,38 @@ Levels in Data Columns
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>The suicide rates across young age groups (10-24 years) highlights a troubling pattern: older subgroups consistently experience a higher rates, reflecting significant vulnerabilities during early adulthood. The age group 15-19 take has a overall higher suicide rate than 10-14 years old in all years from 1999 to 2021, and 20-24 has a overal higher suicide rate than 15-19. At the same time, younger groups, like 10-14 years and 15-19 years, show gradual yet steady increases, signaling growing mental health challenges even at an early age.</p>
+</div>
+<p>The suicide rates across young age groups (10-24 years) highlights a troubling pattern: older subgroups consistently experience a higher rates, reflecting significant vulnerabilities during early adulthood. The age group 15-19 take has a overall higher suicide rate than 10-14 years old in all years from 1999 to 2021, and 20-24 has a overall higher suicide rate than 15-19. At the same time, younger groups, like 10-14 years and 15-19 years, show gradual yet steady increases, signaling growing mental health challenges even at an early age.</p>
 </section>
 <section id="trend-for-suicide-rates-by-sex-over-time" class="level3" data-number="3.3.3">
 <h3 data-number="3.3.3" class="anchored" data-anchor-id="trend-for-suicide-rates-by-sex-over-time"><span class="header-section-number">3.3.3</span> Trend for Suicide Rates by Sex Over Time</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_suicide_rates_combined</span>(data, <span class="at">group_id =</span> <span class="dv">3</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"Figure 5: Suicide Rates From 1999 to 2021 by young age groups 10-24, 4 years range"</span>) <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>This updated graph provides a clearer view of the trends in suicide rates by sex from 1999 to 2021. The suicide rate for males consistently remains significantly higher than for females throughout the entire period. Male rates start at approximately 18 per 100,000 in 1999 and gradually rise, peaking around 2017-2018, before showing a slight decline and leveling off towards 2021. For females, the suicide rate starts at around 3 per 100,000 and shows a slow and steady upward trend, with minimal fluctuations. The stark disparity between male and female suicide rates highlights a persistent and significant issue, with males being at substantially higher risk.</p>
+</div>
+<p>The above graph provides a clearer view of the trends in suicide rates by sex from 1999 to 2021. The suicide rate for males consistently remains significantly higher than for females throughout the entire period. Male rates start at approximately 18 per 100,000 in 1999 and gradually rise, peaking around 2017-2018, before showing a slight decline and leveling off towards 2021. For females, the suicide rate starts at around 3 per 100,000 and shows a slow and steady upward trend, with minimal fluctuations. The stark disparity between male and female suicide rates highlights that males are at substantially higher risk.</p>
 </section>
 <section id="trend-for-suicide-rates-by-race-over-time" class="level3" data-number="3.3.4">
 <h3 data-number="3.3.4" class="anchored" data-anchor-id="trend-for-suicide-rates-by-race-over-time"><span class="header-section-number">3.3.4</span> Trend for Suicide Rates by Race Over Time</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dataset with combined race groups by averaging male and female estimates</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>combine_race_data <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
@@ -2187,19 +2222,25 @@ Levels in Data Columns
 <span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This graph displays the trends in suicide rates across four racial groups from 1999 to 2019.</p>
-<p><strong>White</strong>: The White racial group consistently exhibits the highest suicide rates over the entire period. Starting at around 12 per 100,000 in 1999, the rate gradually increases over time, peaking at over 16 per 100,000 around 2017-2018 before showing a slight decline. This steady upward trend highlights significant mental health challenges within this group.</p>
-<p><strong>American Indian and Alaska Native</strong>: This group shows the second-highest suicide rates, starting at approximately 10 per 100,000 in 1999. While the trend remains relatively stable for much of the timeline, there is a notable spike around 2004, followed by some fluctuation and a gradual rise after 2015. The persistent high rates in this group emphasize the need for targeted mental health interventions addressing probably specific cultural and systemic challenges.</p>
-<p><strong>Asian or Pacific Islander</strong>: The Asian or Pacific Islander group has one of the lowest suicide rates, with values starting near 6 per 100,000 in 1999. The trend remains largely stable over the years, with only slight increases after 2014.</p>
-<p><strong>Black</strong>: The Black group also has lower suicide rates, similar to the Asian or Pacific Islander group, starting at approximately 6 per 100,000 in 1999. However, unlike the Asian group, this group maintains a lower suicide steadily rate over time until 2015. Then start increasing reaching nearly 7 per 100,000 by 2019. The steady rise indicates growing mental health challenges that require focused attention.</p>
+<ul>
+<li><p><strong>White</strong>: The White racial group consistently exhibits the highest suicide rates over the entire period. Starting at around 12 per 100,000 in 1999, the rate gradually increases over time, peaking at over 16 per 100,000 around 2017-2018 before showing a slight decline. This steady upward trend highlights significant mental health challenges within this group.</p></li>
+<li><p><strong>American Indian and Alaska Native</strong>: This group shows the second-highest suicide rates, starting at approximately 10 per 100,000 in 1999. While the trend remains relatively stable for much of the timeline, there is a notable spike around 2004, followed by some fluctuation and a gradual rise after 2015. The persistent high rates in this group emphasize the need for targeted mental health interventions addressing probably specific cultural and systemic challenges.</p></li>
+<li><p><strong>Asian or Pacific Islander</strong>: The Asian or Pacific Islander group has one of the lowest suicide rates, with values starting near 6 per 100,000 in 1999. The trend remains largely stable over the years, with only slight increases after 2014.</p></li>
+<li><p><strong>Black</strong>: The Black group also has lower suicide rates, similar to the Asian or Pacific Islander group, starting at approximately 6 per 100,000 in 1999. However, unlike the Asian group, this group maintains a lower suicide steadily rate over time until 2015. Then start increasing reaching nearly 7 per 100,000 by 2019. The steady rise indicates growing mental health challenges that require focused attention.</p></li>
+</ul>
 </section>
 <section id="trend-for-suicide-rates-by-whether-hispanic-over-time" class="level3" data-number="3.3.5">
 <h3 data-number="3.3.5" class="anchored" data-anchor-id="trend-for-suicide-rates-by-whether-hispanic-over-time"><span class="header-section-number">3.3.5</span> Trend for Suicide Rates by whether-hispanic Over Time</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine Hispanic and Non-Hispanic groups by averaging their respective SUBGROUP_IDs</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>hispanic_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
@@ -2245,10 +2286,14 @@ Levels in Data Columns
 <span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>This graph compares suicide rates between Hispanic and Non-Hispanic groups from 1999 to 2019. The Non-Hispanic group consistently exhibits higher suicide rates throughout the period, starting at approximately 9 per 100,000 in 1999 and gradually increasing to over 12.5 per 100,000 by 2019. In contrast, the Hispanic group (red line) maintains significantly lower suicide rates, starting at around 6 per 100,000 in 1999 and experiencing a slight but steady increase over the years, peaking at just above 7 per 100,000 by 2019. The widening gap between the two groups highlights a persistent disparity, with Non-Hispanic individuals facing significantly higher suicide risks. This trend underscores the importance of exploring cultural, social, and systemic factors that may contribute to these differences. We do some exploration in Hispanic population below.</p>
+</div>
+<p>This graph compares suicide rates between Hispanic and Non-Hispanic groups from 1999 to 2019. The Non-Hispanic group consistently exhibits higher suicide rates throughout the period. In contrast, the Hispanic group (red line) maintains significantly lower suicide rates. The widening gap between the two groups highlights a persistent disparity, with Non-Hispanic individuals facing significantly higher suicide risks. We do some exploration in Hispanic population below.</p>
 <p>The disparity in suicide rates between Hispanic and non-Hispanic populations is influenced by a combination of cultural, social, economic, and systemic factors. In Hispanic communities, strong familial and community support, often referred to as <em>familismo</em>, plays a protective role, providing emotional and social safety nets that may reduce the risk of suicide. Religious beliefs, particularly within Catholicism, often discourage suicide, adding another layer of protection. However, cultural stigma around mental health often prevents open discussion and limits access to mental health resources, which can both suppress suicide risk and lead to underreporting.</p>
 <p>Economic challenges also contribute to these differences. Many Hispanic individuals face lower income levels, unstable employment, and limited access to healthcare, which can exacerbate mental health issues while also restricting their documentation and treatment. For Hispanic immigrants, acculturation stress, discrimination, and immigration-related fears add further mental health burdens. Among Hispanic youth, acculturation gaps between parents and children can lead to family conflict, which has been linked to higher suicide risk, particularly among second-generation youth.</p>
 <p>The term <em>Hispanic</em> encompasses diverse populations, and suicide risk factors vary among subgroups. For instance, Puerto Ricans have been reported to experience higher suicide rates, particularly among youth, due to economic and social challenges. Conversely, Cuban Americans often display lower rates, possibly due to stronger economic stability and established community networks. Mexican Americans, the largest Hispanic group in the U.S., are heavily studied, with risk factors often tied to immigration and acculturation dynamics.</p>
@@ -2258,7 +2303,7 @@ Levels in Data Columns
 <section id="correlation-exploration-for-2021-data" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="correlation-exploration-for-2021-data"><span class="header-section-number">3.4</span> Correlation Exploration for 2021 Data</h2>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data_2021 <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(TIME_PERIOD <span class="sc">==</span> <span class="dv">2021</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2267,7 +2312,7 @@ Levels in Data Columns
 <section id="data-recombination" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="data-recombination"><span class="header-section-number">3.4.1</span> Data Recombination</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cutout and encode the dataset </span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Process the data to add the new columns</span></span>
@@ -2304,15 +2349,17 @@ Levels in Data Columns
 </details>
 </div>
 <p>To focus on the latest trends and explore the correlation between different division and suicide rate, we extracted data from the year 2021 from the dataset. This subset, data_2021, was then further refined to include only the data corresponding to a specific GROUP_ID (Eliminate overlapping relation inside the column by selecting a specific group) and underwent several transformations to enhance its usability and analytical clarity. Specifically, new columns were added to encode key demographic attributes:</p>
-<p><strong>1.</strong> A sex column was created to classify subgroups as “Male” or “Female” based on the SUBGROUP text.</p>
-<p><strong>2.</strong> A race column was added to categorize individuals into racial groups and origin (e.g., Asian, Black, White, Hispanic) or mark them as “Other” when no clear racial identifier was present based on the SUBGROUP text. (Given the selected GROUP_ID, the subgroups available include information on sex, race and Hispanic origin (single race), and age group. In the data, individuals identified as non-Hispanic belong to specific racial groups, while those identified as Hispanic represent a general category encompassing all races. Due to this structure, we treat “Hispanic” as an independent category, separate from the specific race groups within the non-Hispanic classification, to account for the unique nature of this division.)</p>
-<p><strong>3.</strong> An age_range column was introduced to group individuals into predefined age ranges (e.g., 15-24, 25-44, etc.) using pattern matching on SUBGROUP text.(age range suggest that this estimate type for estimate will be crude)</p>
+<ol type="1">
+<li><p>A sex column was created to classify subgroups as “Male” or “Female” based on the SUBGROUP text.</p></li>
+<li><p>A race column was added to categorize individuals into racial groups and origin (e.g., Asian, Black, White, Hispanic) or mark them as “Other” when no clear racial identifier was present based on the SUBGROUP text. (Given the selected GROUP_ID, the subgroups available include information on sex, race and Hispanic origin (single race), and age group. In the data, individuals identified as non-Hispanic belong to specific racial groups, while those identified as Hispanic represent a general category encompassing all races. Due to this structure, we treat “Hispanic” as an independent category, separate from the specific race groups within the non-Hispanic classification, to account for the unique nature of this division.)</p></li>
+<li><p>An age_range column was introduced to group individuals into predefined age ranges (e.g., 15-24, 25-44, etc.) using pattern matching on SUBGROUP text.(age range suggest that this estimate type for estimate will be crude)</p></li>
+</ol>
 <p>Finally, unnecessary columns were removed to streamline the dataset, leaving only the essential fields: SUBGROUP, SUBGROUP_ID, SUBGROUP_ORDER, ESTIMATE, sex, age_range, and race. The resulting dataset, data_2021_10, is more concise and organized, facilitating deeper analysis of demographic patterns within a targeted subgroup for the year 2021.</p>
 </section>
 <section id="suicide-rate-vs-sex-2021" class="level3" data-number="3.4.2">
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="suicide-rate-vs-sex-2021"><span class="header-section-number">3.4.2</span> Suicide Rate vs Sex, 2021</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_2021_10, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(sex), <span class="at">y =</span> ESTIMATE, <span class="at">fill =</span> <span class="fu">as.factor</span>(sex))) <span class="sc">+</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -2332,12 +2379,16 @@ Levels in Data Columns
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">15</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This boxplot shows that median suicide rate is significantly higher for males, as depicted by the central line within the male boxplot, which lies far above the female median. The male distribution exhibits a larger interquartile range, indicating greater variability in suicide rates compared to females, whose rates cluster tightly around the lower end. Outliers in both groups reflect extreme cases, with males showing outliers above 80 per 100,000, underscoring their elevated risk.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Categorize suicide rates into "High" and "Low" based on the median</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data_2021_10 <span class="ot">&lt;-</span> data_2021_10 <span class="sc">%&gt;%</span></span>
@@ -2364,7 +2415,11 @@ Levels in Data Columns
 <span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The mosaic plot highlights the correlation between sex and suicide rate levels, dividing individuals into categories of “high than average” and “low than average” suicide rates for 2021. The data shows a notable gender disparity: the majority of males fall into the “high than average” category, indicating that males are significantly more likely to have above-average suicide rates. In contrast, females predominantly fall into the “low than average” category, suggesting lower susceptibility to high suicide rates. This visualization underscores a strong association between being male and elevated suicide risk, emphasizing the need for sex-specific prevention strategies to address this disparity.</p>
@@ -2372,7 +2427,7 @@ Levels in Data Columns
 <section id="suicide-rate-vs-race-origin-2021" class="level3" data-number="3.4.3">
 <h3 data-number="3.4.3" class="anchored" data-anchor-id="suicide-rate-vs-race-origin-2021"><span class="header-section-number">3.4.3</span> Suicide Rate vs Race &amp; Origin, 2021</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_2021_10, <span class="fu">aes</span>(<span class="at">x =</span> race, <span class="at">y =</span> ESTIMATE, <span class="at">fill =</span> race)) <span class="sc">+</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -2390,12 +2445,16 @@ Levels in Data Columns
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The boxplot illustrates the variation in suicide rates across different racial groups in 2021. American Indian and Alaska Native individuals have the highest median suicide rate, with a wide interquartile range and several outliers exceeding 60 per 100,000, highlighting this group as particularly vulnerable. White individuals also exhibit high suicide rates, with a high median and considerable variability. In contrast, Asian, Black and Hispanic groups demonstrate lower median suicide rates, with tighter interquartile ranges and minimal variability, indicating relatively consistent and lower suicide risks. Native Hawaiian or Other Pacific Islander group has the highest median, but the tightest IQR, which mainly becuase the missing value in this category.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to create a mosaic plot for a given binary column</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>create_mosaic_by_rate <span class="ot">&lt;-</span> <span class="cf">function</span>(data, binary_column, title) {</span>
@@ -2454,7 +2513,11 @@ Levels in Data Columns
 <span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The mosaic plots demonstrate varying correlations between suicide rate levels and racial groups, emphasizing disparities in vulnerability.</p>
@@ -2470,7 +2533,7 @@ Levels in Data Columns
 <section id="suicide-rate-vs-age-range-2021" class="level3" data-number="3.4.4">
 <h3 data-number="3.4.4" class="anchored" data-anchor-id="suicide-rate-vs-age-range-2021"><span class="header-section-number">3.4.4</span> Suicide Rate vs Age range, 2021</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_2021_10, <span class="fu">aes</span>(<span class="at">x =</span> age_range, <span class="at">y =</span> ESTIMATE, <span class="at">fill =</span> age_range)) <span class="sc">+</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -2487,12 +2550,16 @@ Levels in Data Columns
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>),)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The boxplot reveals distinct characteristics of suicide rates across age ranges in 2021. The 15-24 years group shows a relatively narrow IQR with a median around 15-20 per 100,000 and a few extreme outliers. The 25-44 years group exhibits the highest variability with a wider IQR, a higher median near 25 per 100,000, and notable outliers extending above 80; the 45-64 years group has the lowest and tightest distribution with a median below 20 per 100,000 and less pronounced outliers; and the 65 and older group demonstrates a similar median to the 45-64 range but with greater variability and some higher-risk outliers above 40.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_2021_10 <span class="ot">&lt;-</span> data_2021_10 <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -2546,7 +2613,11 @@ Levels in Data Columns
 <span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The mosaic plots analyze the correlation between age groups and suicide rate levels (above or below the average) in 2021. For the 15-24 years group, a higher proportion falls into the “high than average” category, suggesting a positive correlation between being in this age group and elevated suicide rates. Similarly, the 25-44 years group also shows a slightly stronger proportion in the “high than average” category, reinforcing a moderate correlation between this age group and higher suicide rates.</p>
@@ -2556,7 +2627,7 @@ Levels in Data Columns
 <section id="suicide-rate-vs-sex-age-race" class="level3" data-number="3.4.5">
 <h3 data-number="3.4.5" class="anchored" data-anchor-id="suicide-rate-vs-sex-age-race"><span class="header-section-number">3.4.5</span> Suicide Rate vs Sex + Age + Race</h3>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace -1 with NA</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>data_2021_10 <span class="ot">&lt;-</span> data_2021_10 <span class="sc">%&gt;%</span></span>
@@ -2598,12 +2669,16 @@ Levels in Data Columns
 <span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The heatmaps provide insights into suicide rates segmented by race, age range, and sex, highlighting variations across these factors. For females, the highest suicide rates are observed among American Indian and Alaska Native women in the 25-44 age range, and the second highest is the women in 15-24 in that race. Women in white with 45-64 and 25-44 also have a relatively high suicide rate. For males, the highest suicide rates are likely among American Indian and Alaska Native men in the 25-44 age range and 15-24 age, with White men also exhibiting relatively high rates in all age range, especially for the 45-64 and 65 and older categories. Native Hawaiian from 25 to 44 also shows a relatively high rate.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for the alluvial diagram</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>alluvial_data <span class="ot">&lt;-</span> data_2021_10 <span class="sc">%&gt;%</span></span>
@@ -2637,7 +2712,11 @@ Levels in Data Columns
 <span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>From the alluvial diagram, we can see that females are predominantly associated with lower suicide rates across all age ranges and racial groups, with only a small proportion linked to higher rates. The only two high rate flow is to 15-24 and 25-44 age American Indian &amp; Alaska Native.In contrast, males display a notable concentration of high suicide rates overall. The only three low rate flow is to 45-64 Asian and 65 older Blakc and Asian. The diagram also emphasizes that the 45-64 and 65 older age ranges tend to have relatively low suicide rates across both sexes and races, whereas the 25-44 and 15-24 age ranges exhibit more variability and higher rates for specific demographics.</p>
@@ -2726,10 +2805,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2739,8 +2835,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2752,7 +2857,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2796,6 +3024,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2821,6 +3050,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2882,12 +3137,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./data.html" class="pagination-link">
+      <a href="./data.html" class="pagination-link" aria-label="Data">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./d3graph.html" class="pagination-link">
+      <a href="./d3graph.html" class="pagination-link" aria-label="Interactive graph">
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -2900,10 +3155,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/zoehahaha/SuicideDeathRate.git/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/zoehahaha/SuicideDeathRate.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
   </div>
 </footer>
+
 
 
 

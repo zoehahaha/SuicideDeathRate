@@ -1,6 +1,6 @@
 # Results
 
-In this project. Our focus will be on three part: the interlace hierarchy of our dataset, time series trend, correlation detection. We will analyze the horizontal trends from 1999 to 2021 and delve deeper into the vertical dimension by focusing on the most recent year in the dataset, 2021. In examining the time series trends, we will explore how different categories have evolved over time. For the single year of 2021, we will investigate the correlation between various categories and the suicide rate.
+In this project. Our focus will be on three part: the interlace hierarchy of our dataset, time series trend, and correlation detection. We will analyze the horizontal trends from 1999 to 2021 and delve deeper into the vertical dimension by focusing on the most recent year in the dataset, 2021. In examining the time series trends, we will explore how different categories have evolved over time. For the single year of 2021, we will investigate the suicide rates' difference in various categories.
 
 ```{r, message=FALSE, warning=FALSE}
 # Load necessary libraries
@@ -43,12 +43,11 @@ data[columns_to_replace] <- lapply(data[columns_to_replace], function(column) {
 })
 ```
 
-As part of the data preprocessing stage, we identified missing values that need to be addressed before proceeding with analysis. For the completely blank columns, namely 'SUBTOPIC', 'SUBTOPIC_ID', and 'FLAG', we will remove them entirely as they do not provide any useful information. Also for the Column 'TOPIC', values for each row are same (value = "Death rates for suicide") which is not useful. Therefore we will remove 'TOPIC' column as well. 
+As part of the data preprocessing stage, we identified missing values that need to be addressed before proceeding with analysis. For the completely blank columns, namely 'SUBTOPIC', 'SUBTOPIC_ID', and 'FLAG', we will remove them entirely as they do not provide any useful information. Also for the Column 'TOPIC', values for each row are the same (value = "Death rates for suicide") which is not useful. Therefore we will remove 'TOPIC' column as well. 
 
-For rows with missing values in the 'ESTIMATE' column, we will replace the missing values with -1 instead of removing the rows. This approach is taken because each row in our dataset contains unique and critical information about a specific subgroup in a given year. Removing such rows could result in the complete loss of information for certain subgroups. Since 'ESTIMATE' values must be greater than zero, using -1 will clearly indicate missing data without overlapping with valid entries. We will apply the same method to handle missing values in the 'STANDARD_ERROR', 'ESTIMATE_UCI', and 'ESTIMATE_LCI' columns.
+For rows with missing values in the 'ESTIMATE' column, we will replace the missing values with -1 instead of removing the rows. This approach is taken because each row in our dataset contains unique and critical information about a specific subgroup in a given year. Removing such rows could result in the complete loss of information for certain subgroups. Since 'ESTIMATE' values are naturally greater than zero, using -1 will clearly indicate missing data without overlapping with valid entries. We will apply the same method to handle missing values in the 'STANDARD_ERROR', 'ESTIMATE_UCI', and 'ESTIMATE_LCI' columns.
 
-After checking, there are no missing value in the dataset now.
-
+After preprocessing, we have a neat and clean dataset to continue on.
 
 ## Hierarchy Data
 
@@ -98,13 +97,13 @@ kable(
 ```
 
 
-After the data cleaning process, the dataset consists of 3,786 rows and 17 columns. Among these 17 columns, 5 are categorical variables, and 12 are numerical variables. Within the numerical columns, 6 serve as corresponding series numbers linked to specific categorical columns, essentially acting as identifiers or keys. Therefore, the columns we focus on, which provide the most valuable insights, include the categorical variables: ESTIMATE_TYPE, CLASSIFICATION, GROUP, SUBGROUP, and TIME_PERIOD, as well as the key numerical variable ESTIMATE.
+After the data cleaning process, the dataset consists of 3,786 rows and 17 columns. Among these 17 columns, 5 are categorical variables and 12 are numerical variables. Within the numerical columns, 6 serve as corresponding series numbers linked to specific categorical columns, essentially acting as identifiers or keys. Therefore, the columns we focus on, which provide the most valuable insights, include the categorical variables: ESTIMATE_TYPE, CLASSIFICATION, GROUP, SUBGROUP, and TIME_PERIOD, as well as the key numerical variable ESTIMATE.
 
 The table above illustrates the levels within the categorical variables, highlighting their variety and structure. Upon closer examination, we observed a hierarchical relationship among some columns. Specifically, the GROUP column serves as a subdivision of CLASSIFICATION, while SUBGROUP represents a further division of GROUP. This hierarchy reflects the nested nature of these variables and provides a structured way to organize and interpret the data. For example, a single CLASSIFICATION may encompass multiple GROUPS, and each GROUP can be broken down into several SUBGROUPS.
 
 In addition to the hierarchical relationships, there are also overlaps, inclusions, and disjoint relationships within certain columns, particularly in the GROUP and SUBGROUP variables. These relationships make the dataset more complex, as some groups or subgroups may belong to multiple categories, while others are entirely distinct. The overlapping for SUBGROUP column is introduced by the GROUP columns due the horizontally hierarchy, so we can use GROUP column as key when we want to choose any specific SUBGROUP for analysis. In general, overlapping and inclusion can introduce ambiguity if not carefully understood and managed.
 
-Understanding the hierarchy and relationships within the dataset is crucial for extracting the most relevant and accurate information. It helps maintains clarity on how CLASSIFICATION, GROUP, and SUBGROUP interact allows us to accurately group and segment the data to explore different questions, identify trends, and derive insights. This structured approach to understanding the dataset lays a strong foundation for conducting reliable analysis and presenting clear, effective visualizations.
+Understanding the hierarchy and relationships within the dataset is crucial for extracting the most relevant and accurate information. It helps maintains clarity on how CLASSIFICATION, GROUP, and SUBGROUP interact allows us to accurately group and segment the data to explore different questions, identify trends, and derive insights. This structured approach to understanding the dataset lays a strong foundation for conducting reliable analysis and presenting effective visualizations.
 
 ### Static Hierarchy Visualization (Tree Diagram)
 
@@ -171,8 +170,7 @@ ggraph(graph, layout = "tree") +  # Use tree layout
 
 ```
 
-We can use tree diagram to effectively visualizes the hierarchical structure between columns of the dataset, illustrating the relationships between different levels: from the dataset as a whole to classifications, groups, and subgroups. By breaking down the dataset into its hierarchical components, the diagram provides clarity on how data is organized and structured, highlighting the nested relationships between categories. One notable adjustment in the visualization is the representation of the GROUP to SUBGROUP layer. Instead of listing all 201 branches from the group layer to the subgroup layer—which would overwhelm the visualization—we aggregate this complexity by summarizing the number of subgroups for each group. This approach enhances readability and ensures that the graph remains clean and interpretable. In the figure 1 in the Interactive graph part, there is a more detailed and comprehensive tree diagram. Due to the benefits animation, the branch is more readable.
-
+We can use tree diagram to effectively visualizes the hierarchical structure between columns of the dataset, illustrating the relationships between different levels: from the dataset as a whole to classifications, groups, and subgroups. By breaking down the dataset into its hierarchical components, the diagram provides clarity on how data is organized and structured. One notable adjustment in the visualization is the representation of the GROUP to SUBGROUP layer. Instead of listing all 201 branches from the group layer to the subgroup layer—which would overwhelm the visualization—we aggregate this complexity by summarizing the number of subgroups for each group. This approach enhances readability and ensures that the graph remains clean and interpretable. In the Figure 1 in the interactive graph part, there is a more detailed and comprehensive tree diagram. Due to the benefits animation, the branch is more readable.
 
 ## Trends Over Time
 
@@ -229,7 +227,7 @@ plot_suicide_rates_combined(data, group_id = 1,1)+
   theme(plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
-The graph above displays the suicide rate (per 100,000 individuals) on the y-axis over time, with the x-axis representing the years from 1999 to 2021. The trend shows a general increase in suicide rates over this period, starting at around 10.5 per 100,000 in 1999 and peaking at around 14.2 per 100,000 at 2018, followed by minor fluctuations. This upward trend indicates a concerning rise in suicide rates years by years. 
+The graph above displays the suicide rate (per 100,000 individuals) on the y-axis over time, with the x-axis representing the years from 1999 to 2021. The trend shows a general increase in suicide rates over this period, starting at around 10.5 per 100,000 in 1999 and peaking at around 14.2 per 100,000 at 2018, followed by minor fluctuations. This upward trend indicates a concerning rise in suicide rates nowadays. 
 
 ### Trend for Suicide Rates by Age Group Over Time
 
@@ -253,28 +251,28 @@ plot_suicide_rates_combined(data_temp, group_id = 2,2) +
 
 This graph visualizes the trends in suicide rates (per 100,000 individuals) across different age groups (9 years age range) from 1999 to 2021. The x-axis represents the years, while the y-axis shows the suicide rates. 
 
-**15-24 years**:
+* **15-24 years**:
 The suicide rate for this group starts relatively low in 1999 but exhibits a sharp and consistent increase, especially after 2010. This group experiences the one of the most rapid rate of growth among all age ranges. The steep rise in recent years highlights an urgent need for intervention focused on younger populations.
 
-**25-34 years**:
+* **25-34 years**:
 The suicide rates are in general higher than 15-24 in each year but shows similar trends as 15-24 years, with rapid increase recent years. Reflecting stable yet consistent growth in suicide rates. This trend highlights a sustained issue for this age group, requiring ongoing attention.
 
-**35-44 years**:
+* **35-44 years**:
 This group exhibits a more gradual increase over time. While the trend is upward, it shows less dramatic changes compared to younger age groups. The growth rate for this group appears stable with minor fluctuations, indicating less volatility over the years.
 
-**45-54 years**:
+* **45-54 years**:
 The trend for this age group shows a stable upward movement with moderate fluctuations. Suicide rates increase gradually over time, but the growth is not as severe as in younger groups. It reach the peak around 2012, followed by a relatively steady phase and slight decrease recent years.
 
-**55-64 years**:
+* **55-64 years**:
 The 55-64 years group displays a moderate upward trend similar to the 45-54 age range. Rates rise steadily over the years but without dramatic spikes. This consistent growth suggests that mid-to-late adulthood is also a critical period for preventive measures.
 
-**65-74 years and 75-84 years**:
+* **65-74 years and 75-84 years**:
 These older age groups show relatively stable trends with a moderate increase over the years. Both groups display minor fluctuations but no significant spikes. While the overall rates remain high compared to younger groups, the trends are less alarming in terms of growth rate.
 
-**85 years and older**:
+* **85 years and older**:
 The oldest age group consistently has the highest overall suicide rates. Although the trend is relatively stable until 2015, there is a sharp increase in recent years, peaking significantly by 2021. This pattern suggests that late-life stressors or challenges may have intensified in recent years.
 
-**Concerns**:
+* **Concerns**:
 The suicide rate among younger age groups has risen dramatically, warranting heightened attention and concern.
 
 
@@ -323,7 +321,7 @@ ggplot(data_fig4, aes(x = TIME_PERIOD, y = ESTIMATE, fill = SUBGROUP)) +
   )
 ```
 
-The suicide rates across young age groups (10-24 years) highlights a troubling pattern: older subgroups consistently experience a higher rates, reflecting significant vulnerabilities during early adulthood. The age group 15-19 take has a overall higher suicide rate than 10-14 years old in all years from 1999 to 2021, and 20-24 has a overal higher suicide rate than 15-19. At the same time, younger groups, like 10-14 years and 15-19 years, show gradual yet steady increases, signaling growing mental health challenges even at an early age. 
+The suicide rates across young age groups (10-24 years) highlights a troubling pattern: older subgroups consistently experience a higher rates, reflecting significant vulnerabilities during early adulthood. The age group 15-19 take has a overall higher suicide rate than 10-14 years old in all years from 1999 to 2021, and 20-24 has a overall higher suicide rate than 15-19. At the same time, younger groups, like 10-14 years and 15-19 years, show gradual yet steady increases, signaling growing mental health challenges even at an early age. 
 
 
 ### Trend for Suicide Rates by Sex Over Time
@@ -334,7 +332,7 @@ plot_suicide_rates_combined(data, group_id = 3,1)+
   theme(plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
-This updated graph provides a clearer view of the trends in suicide rates by sex from 1999 to 2021. The suicide rate for males consistently remains significantly higher than for females throughout the entire period. Male rates start at approximately 18 per 100,000 in 1999 and gradually rise, peaking around 2017-2018, before showing a slight decline and leveling off towards 2021. For females, the suicide rate starts at around 3 per 100,000 and shows a slow and steady upward trend, with minimal fluctuations. The stark disparity between male and female suicide rates highlights a persistent and significant issue, with males being at substantially higher risk. 
+The above graph provides a clearer view of the trends in suicide rates by sex from 1999 to 2021. The suicide rate for males consistently remains significantly higher than for females throughout the entire period. Male rates start at approximately 18 per 100,000 in 1999 and gradually rise, peaking around 2017-2018, before showing a slight decline and leveling off towards 2021. For females, the suicide rate starts at around 3 per 100,000 and shows a slow and steady upward trend, with minimal fluctuations. The stark disparity between male and female suicide rates highlights that males are at substantially higher risk. 
 
 
 ### Trend for Suicide Rates by Race Over Time
@@ -393,16 +391,16 @@ ggplot(race_trend_data, aes(x = TIME_PERIOD, y = Avg_Estimate, color = Race, gro
 
 This graph displays the trends in suicide rates across four racial groups from 1999 to 2019.
 
-**White**:
+* **White**:
 The White racial group consistently exhibits the highest suicide rates over the entire period. Starting at around 12 per 100,000 in 1999, the rate gradually increases over time, peaking at over 16 per 100,000 around 2017-2018 before showing a slight decline. This steady upward trend highlights significant mental health challenges within this group.
 
-**American Indian and Alaska Native**:
+* **American Indian and Alaska Native**:
 This group shows the second-highest suicide rates, starting at approximately 10 per 100,000 in 1999. While the trend remains relatively stable for much of the timeline, there is a notable spike around 2004, followed by some fluctuation and a gradual rise after 2015. The persistent high rates in this group emphasize the need for targeted mental health interventions addressing probably specific cultural and systemic challenges.
 
-**Asian or Pacific Islander**:
+* **Asian or Pacific Islander**:
 The Asian or Pacific Islander group has one of the lowest suicide rates, with values starting near 6 per 100,000 in 1999. The trend remains largely stable over the years, with only slight increases after 2014.
 
-**Black**:
+* **Black**:
 The Black group also has lower suicide rates, similar to the Asian or Pacific Islander group, starting at approximately 6 per 100,000 in 1999. However, unlike the Asian group, this group maintains a lower suicide steadily rate over time until 2015. Then start increasing reaching nearly 7 per 100,000 by 2019. The steady rise indicates growing mental health challenges that require focused attention.
 
 
@@ -454,7 +452,7 @@ ggplot(hispanic_data, aes(x = TIME_PERIOD, y = ESTIMATE, color = Hispanic_Group,
 
 ```
 
-This graph compares suicide rates between Hispanic and Non-Hispanic groups from 1999 to 2019. The Non-Hispanic group consistently exhibits higher suicide rates throughout the period, starting at approximately 9 per 100,000 in 1999 and gradually increasing to over 12.5 per 100,000 by 2019. In contrast, the Hispanic group (red line) maintains significantly lower suicide rates, starting at around 6 per 100,000 in 1999 and experiencing a slight but steady increase over the years, peaking at just above 7 per 100,000 by 2019. The widening gap between the two groups highlights a persistent disparity, with Non-Hispanic individuals facing significantly higher suicide risks. This trend underscores the importance of exploring cultural, social, and systemic factors that may contribute to these differences. We do some exploration in Hispanic population below.
+This graph compares suicide rates between Hispanic and Non-Hispanic groups from 1999 to 2019. The Non-Hispanic group consistently exhibits higher suicide rates throughout the period. In contrast, the Hispanic group (red line) maintains significantly lower suicide rates. The widening gap between the two groups highlights a persistent disparity, with Non-Hispanic individuals facing significantly higher suicide risks. We do some exploration in Hispanic population below.
 
 The disparity in suicide rates between Hispanic and non-Hispanic populations is influenced by a combination of cultural, social, economic, and systemic factors. In Hispanic communities, strong familial and community support, often referred to as *familismo*, plays a protective role, providing emotional and social safety nets that may reduce the risk of suicide. Religious beliefs, particularly within Catholicism, often discourage suicide, adding another layer of protection. However, cultural stigma around mental health often prevents open discussion and limits access to mental health resources, which can both suppress suicide risk and lead to underreporting.
 
@@ -512,12 +510,12 @@ data_2021_10 <- subset(data_2021_10, select = c(SUBGROUP,SUBGROUP_ID,SUBGROUP_OR
 
 To focus on the latest trends and explore the correlation between different division and suicide rate, we extracted data from the year 2021 from the dataset. This subset, data_2021, was then further refined to include only the data corresponding to a specific GROUP_ID (Eliminate overlapping relation inside the column by selecting a specific group) and underwent several transformations to enhance its usability and analytical clarity. Specifically, new columns were added to encode key demographic attributes:
 
-**1.** A sex column was created to classify subgroups as "Male" or "Female" based on the SUBGROUP text.
+1. A sex column was created to classify subgroups as "Male" or "Female" based on the SUBGROUP text.
 
-**2.** A race column was added to categorize individuals into racial groups and origin (e.g., Asian, Black, White, Hispanic) or mark them as "Other" when no clear racial identifier was present based on the SUBGROUP text. 
+2.  A race column was added to categorize individuals into racial groups and origin (e.g., Asian, Black, White, Hispanic) or mark them as "Other" when no clear racial identifier was present based on the SUBGROUP text. 
 (Given the selected GROUP_ID, the subgroups available include information on sex, race and Hispanic origin (single race), and age group. In the data, individuals identified as non-Hispanic belong to specific racial groups, while those identified as Hispanic represent a general category encompassing all races. Due to this structure, we treat "Hispanic" as an independent category, separate from the specific race groups within the non-Hispanic classification, to account for the unique nature of this division.)
 
-**3.** An age_range column was introduced to group individuals into predefined age ranges (e.g., 15-24, 25-44, etc.) using pattern matching on SUBGROUP text.(age range suggest that this estimate type for estimate will be crude)
+3.  An age_range column was introduced to group individuals into predefined age ranges (e.g., 15-24, 25-44, etc.) using pattern matching on SUBGROUP text.(age range suggest that this estimate type for estimate will be crude)
 
 Finally, unnecessary columns were removed to streamline the dataset, leaving only the essential fields: SUBGROUP, SUBGROUP_ID, SUBGROUP_ORDER, ESTIMATE, sex, age_range, and race. The resulting dataset, data_2021_10, is more concise and organized, facilitating deeper analysis of demographic patterns within a targeted subgroup for the year 2021.
 
@@ -655,7 +653,7 @@ grid.arrange(
 
 The mosaic plots demonstrate varying correlations between suicide rate levels and racial groups, emphasizing disparities in vulnerability. 
 
-* *Native Americans*
+* **Native Americans**
 show a strong association with higher suicide rates, as a significant proportion of this group falls into the "high than average" category, indicating a strong correlation between belonging to this race and elevated suicide risk. 
 
 * **Whites**
